@@ -2,6 +2,7 @@
 
 **For:** the incoming front-end developer
 **Repo:** `ep-website` (Astro 5.18.2) · **Target:** educationprogress.org
+**Scope:** the whole site **except the GT Regulations project** — see Scope below
 **Written:** 2026-08-13 · DNS facts verified live on that date
 
 ---
