@@ -1,0 +1,76 @@
+# ============================================================================
+# SUBSTACK REDIRECT MAP  —  DO NOT DELETE. EVER.
+# ============================================================================
+#
+# WHAT THIS FILE IS
+# educationprogress.org was the Substack for two years. Every old newsletter
+# email, every restack, every link anyone else ever published points at
+# educationprogress.org/p/[slug]. At cutover this domain starts serving the
+# hub instead — so without this file, all of that goes to a 404 the day we
+# launch, silently, and we find out from traffic that stops arriving.
+#
+# These rules forward the Substack-shaped URLs to news.educationprogress.org,
+# where the newsletter now lives. This is permanent infrastructure, not
+# launch scaffolding. It never gets "cleaned up."
+#
+# HOW IT WORKS
+# Cloudflare Pages reads this file from the root of the built site. Astro
+# copies everything in public/ into dist/ verbatim, so this lands at
+# dist/_redirects automatically. No build step, no config.
+#
+# FORMAT:  /source/path   https://destination   301
+#   *       in a source matches the rest of the path
+#   :splat  in a destination pastes back whatever * matched
+#   301     means "moved permanently" — tells Google to transfer the ranking
+#
+# ORDER MATTERS. First matching rule wins. Specific rules go above wildcards.
+#
+# ANY PATH NOT LISTED HERE IS SERVED BY THE HUB. That is deliberate: /, /about,
+# /library, /research, /tools, /donate are ours now, and the hub's versions
+# supersede Substack's. Do not add rules for those.
+#
+# TESTING: scripts/check-redirects.mjs verifies every rule below against a
+# real deployment. Run it before cutover, and again right after.
+# ============================================================================
+
+
+# ---- Posts: THE critical rule ---------------------------------------------
+# Two years of emails and restacks point here. If one rule in this file has
+# to work, it is this one.
+/p/*              https://news.educationprogress.org/p/:splat              301
+
+
+# ---- Archive, feed, sections, tags ----------------------------------------
+# /feed matters more than it looks: RSS readers and aggregators are subscribed
+# to it and will silently go quiet if it dies.
+/archive          https://news.educationprogress.org/archive               301
+/archive/*        https://news.educationprogress.org/archive/:splat        301
+/feed             https://news.educationprogress.org/feed                  301
+/s/*              https://news.educationprogress.org/s/:splat              301
+/t/*              https://news.educationprogress.org/t/:splat              301
+
+
+# ---- Comments and Substack's internal share/image paths -------------------
+# /i/ is what Substack uses for share images and embeds; these appear inside
+# old emails and on social cards.
+/comments/*       https://news.educationprogress.org/comments/:splat       301
+/i/*              https://news.educationprogress.org/i/:splat              301
+
+
+# ---- Substack's API -------------------------------------------------------
+# Nothing of ours uses this. Forwarding it prevents stray 404s from embeds
+# and old share widgets.
+# NOTE: pull the URL inventory (see check-redirects.mjs --inventory) BEFORE
+# cutover — this endpoint is how we enumerate old posts, and it stops
+# answering on this domain once the swap happens.
+/api/*            https://news.educationprogress.org/api/:splat            301
+
+
+# ---- Subscribe ------------------------------------------------------------
+# DECISION FOR THOMAS — currently sends people to the hub's signup section,
+# which is the right call if the hub offers both Buttondown and Substack.
+# If we'd rather send subscribers straight to Substack, change this line to:
+#   /subscribe    https://news.educationprogress.org/subscribe             301
+# What is NOT acceptable is deleting the line. /subscribe must never 404 —
+# it is linked from the footer of every newsletter ever sent.
+/subscribe        /#signup                                                 301
