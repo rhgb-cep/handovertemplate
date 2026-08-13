@@ -19,6 +19,54 @@ project actually is.
 
 ---
 
+## Scope
+
+**In scope — the hub site.** Homepage, Library, Research, About, Donate, the
+Tools index, Contests, and the nine long-form feature essays. All content
+collections. The full launch sequence: DNS, hosting, redirects, 404, sitemap,
+analytics, email signup, accessibility, and the editor CMS.
+
+**Out of scope — the GT Regulations project.** The state gifted-education
+regulations map is a separate effort with its own data pipeline, its own
+maintainer, and its own release cycle. You are not being asked to build,
+extend, verify, or take ownership of it.
+
+Working assumption: **the tool stays live on the site exactly as it is, and you
+leave it alone.** The alternative — moving it to its own subdomain — is a
+question the project plan deliberately left open, and it is not yours to
+settle. Confirm which it is before launch week rather than during it.
+
+Its footprint, so you know what not to touch:
+
+    src/pages/tools/gt-regs.astro     the tool page, ~460 lines
+    src/lib/gt-map.ts                 map projection, build-time
+    src/data/gt-regs/                 statutes, state records, map geometry
+    src/content/tools/gt-regs.md      its card on the Tools index
+    scripts/gt-regs/, sync-gt-regs.sh data sync from the source repo
+    data/gt-regs-review/, gt-regs-scope.md
+
+**One thread does cross the line, and you should know about it.** The Research
+page renders a small preview of that same map: `src/pages/research.astro:130`
+uses `ToolThumb`, which imports `projectStates` from `src/lib/gt-map.ts`. So
+the regs map is not perfectly excisable — a piece of it appears on a page you
+do own.
+
+This costs you nothing in practice. The preview is generated at build time into
+static SVG; there is no runtime dependency, no data to maintain, and it will
+keep working untouched. **Recommendation: leave it exactly as is.** Just don't
+be surprised to find map code running on a page that isn't the map's.
+
+Also out of scope: the **National G&T Data** explorer. It is deliberately
+marked `coming-soon` pending an editorial decision and renders as a stub. It
+degrades gracefully, and nothing about it blocks launch.
+
+Net effect on the Tools page: with the regs map untouched and the data explorer
+dormant, the Tools index is a directory rather than a workbench. The page
+already handles this — the combined-view panel is gated on having two or more
+live tools and simply doesn't render. Not a bug.
+
+---
+
 ## Where things stand right now
 
 Verified by DNS lookup on 2026-08-13 — not from documentation, from the live
@@ -74,7 +122,8 @@ pointing at Netlify hosting is an entirely ordinary arrangement.
 | Framework | Astro 5.18.2 — components are JSX-adjacent; a React developer reads them on day one |
 | Content | Markdown files validated by Zod schemas (`src/content.config.ts`) |
 | Styling | Hand-written CSS, scoped per component. No framework, no Tailwind. |
-| Maps | `src/lib/gt-map.ts` projects TopoJSON into static SVG **at build time** via d3-geo — no charting library reaches the browser. It works; try not to break it. |
+| Maps | `src/lib/gt-map.ts` projects TopoJSON into static SVG **at build time** via d3-geo — no charting library reaches the browser. Belongs to the out-of-scope regs project; leave it alone. It works. |
+| Charts | Existing graphics are hand-written inline SVG in the brand palette. Datawrapper is the intended direction — see Open Questions. |
 | Data prep | Two Python scripts convert Excel to JSON. They run at authoring time only and are not part of the build or deploy. |
 | Fonts | Self-hosted via `@fontsource` — no external font requests |
 
@@ -141,8 +190,9 @@ shortly before cutover to catch anything published in the meantime.
 ## What is built, and what is left
 
 **Built:** design system, header/footer, homepage, Library, Research, About,
-Donate, nine feature essays, the state gifted-regulations map, Substack RSS
-pulling at build time.
+Donate, the Tools index, Contests, nine feature essays, and a Substack feed
+that pulls at build time. Phases 1 through 3 of the project plan are
+essentially complete — this is a finishing and launching job, not a build.
 
 **Developer work remaining — roughly 35–40 hours:**
 
@@ -199,8 +249,34 @@ development goes. Assign them now, with names and dates.
 - **VERIFY: do query strings survive the 301?** Real email links carry
   `?utm_source=substack`. The inventory deliberately includes one such URL so
   the dry run tests it.
-- **National G&T Data tool** is deliberately `coming-soon` pending a framing
-  decision. It is designed to degrade gracefully; it does not block launch.
+- **Datawrapper for charts.** This is the direction we want: staff should be
+  able to update a chart without a developer. It is a post-launch change, not
+  a launch blocker, and the current graphics work.
+
+  Worth settling one worry up front — **Datawrapper embeds work fine on a
+  static site, and the static/dynamic distinction does not apply here.** The
+  chart is not compiled into the page; the page holds an iframe and
+  Datawrapper serves the chart live. Edit and republish a chart and every page
+  showing it updates immediately, with no rebuild and no deploy. For charts, a
+  static site with embeds is *more* dynamic than a database-driven site with
+  hand-coded ones.
+
+  Two consequences to weigh when we do it: embeds load a third-party script and
+  make a request to Datawrapper's CDN, which needs to appear in the privacy
+  policy; and matching the cream background and brand palette may require a
+  paid theming tier. VERIFY both before committing.
+
+  Note also that the existing inline-SVG rule is written into the repo's
+  `CLAUDE.md` as a design standard. If we change direction, update that file
+  too, or the next person will revert it as a mistake.
+
+- **National G&T Data tool** is out of scope and deliberately `coming-soon`
+  pending an editorial decision. It degrades gracefully; it does not block
+  launch.
+
+- **Does the regs map stay on the site or move to its own subdomain?** Left
+  open by the project plan. Not the developer's call, but it needs an answer
+  before launch week.
 
 ---
 
