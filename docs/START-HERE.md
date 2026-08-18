@@ -31,10 +31,10 @@ regulations map is a separate effort with its own data pipeline, its own
 maintainer, and its own release cycle. You are not being asked to build,
 extend, verify, or take ownership of it.
 
-Working assumption: **the tool stays live on the site exactly as it is, and you
-leave it alone.** The alternative — moving it to its own subdomain — is a
-question the project plan deliberately left open, and it is not yours to
-settle. Confirm which it is before launch week rather than during it.
+**This is settled, not an assumption:** `docs/domain-cutover-runbook.md` in the
+site repo records that the regs map lives inside the hub at `/tools/gt-regs`
+rather than on its own subdomain, so `news` is the only subdomain needed at
+launch. The tool stays exactly where it is, and you leave it alone.
 
 Its footprint, so you know what not to touch:
 
@@ -78,8 +78,8 @@ records:
 | Nameservers | `dns1/dns2.registrar-servers.com` — still Namecheap's. **The planned move of DNS management to Cloudflare has not happened yet.** |
 | `www` | CNAME → `target.substack-custom-domains.com` — this is Substack |
 | Apex (bare domain) | A record → `162.255.119.43`, Namecheap's URL-forwarding service, sending visitors to `www` |
-| `news.` subdomain | Does not exist yet |
-| Email | MX → `smtp.google.com` — Google Workspace |
+| `news.` subdomain | Already resolves — A record to `192.64.119.254`, Namecheap's forwarding service. It gets replaced during cutover; check what it currently is in Namecheap's Advanced DNS. |
+| Email | MX → `smtp.google.com` — Google Workspace. **No SPF record and no DMARC record exist.** Pre-existing deliverability gap, not caused by the migration; the site repo's runbook fixes it after cutover. |
 
 Two things follow from that table, and they are the two most important facts
 in this document:
@@ -274,9 +274,8 @@ development goes. Assign them now, with names and dates.
   pending an editorial decision. It degrades gracefully; it does not block
   launch.
 
-- **Does the regs map stay on the site or move to its own subdomain?** Left
-  open by the project plan. Not the developer's call, but it needs an answer
-  before launch week.
+- **Where does `/subscribe` point?** Settled — to Substack, because the hub has
+  no subscribe page until Buttondown ships. Revisit after Phase 5.
 
 ---
 
