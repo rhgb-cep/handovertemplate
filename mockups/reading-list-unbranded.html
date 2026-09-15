@@ -1,0 +1,1200 @@
+<title>Books That Build Knowledge</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+
+<style>
+  /* ============================================================
+     Design system — a "policy journal" treatment.
+     Commits to the paper (light) world by design — cream, never white —
+     so this page is deliberately single-theme and paints every color.
+     ============================================================ */
+  :root {
+    /* Villanova navy and light blue, with honeycomb amber as the warm accent. */
+    --bg: #FDFBF6;
+    --surface: #FFFFFF;
+    --inset: #FBF0D9;
+    --fg: #16233B;
+    --muted: #4E5E78;
+    --faint: #8C99AC;
+    --rule-color: #E7E3D8;
+    --rule-strong: #CFC9B8;
+
+    --accent: #0B4EA2;
+    --honey: #A9781A;
+    --honey-bright: #E0A526;
+    --deep: #00205B;
+    --sky: #75BEE9;
+    --warn: #A9781A;
+    --warn-bright: #E0A526;
+    --alert: #9A3324;
+    --link: #0B4EA2;
+
+    --serif: "Newsreader", Charter, Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    --rule: 1px solid var(--rule-color);
+    --wide: 72rem;
+
+    font-size: 17px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1626; --surface: #162033; --inset: #1E2A40;
+      --fg: #EAEFF6; --muted: #A6B4C8; --faint: #7A8AA1;
+      --rule-color: #24314A; --rule-strong: #35455F;
+      --accent: #75BEE9; --honey: #E0A526; --honey-bright: #F0C05A;
+      --deep: #081120; --sky: #75BEE9;
+      --warn: #E0A526; --warn-bright: #F0C05A; --alert: #E0796A; --link: #75BEE9;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1626; --surface: #162033; --inset: #1E2A40;
+    --fg: #EAEFF6; --muted: #A6B4C8; --faint: #7A8AA1;
+    --rule-color: #24314A; --rule-strong: #35455F;
+    --accent: #75BEE9; --honey: #E0A526; --honey-bright: #F0C05A;
+    --deep: #081120; --sky: #75BEE9;
+    --warn: #E0A526; --warn-bright: #F0C05A; --alert: #E0796A; --link: #75BEE9;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='96'%3E%3Cpath d='M28 0l24 14v28L28 56 4 42V14z' fill='none' stroke='%23000' stroke-opacity='0.035' stroke-width='1.2'/%3E%3Cpath d='M0 48l24 14v28L0 104l-24-14V62z' fill='none' stroke='%23000' stroke-opacity='0.035' stroke-width='1.2'/%3E%3Cpath d='M56 48l24 14v28l-24 14-24-14V62z' fill='none' stroke='%23000' stroke-opacity='0.035' stroke-width='1.2'/%3E%3C/svg%3E");
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--serif);
+    font-size: 1rem;
+    line-height: 1.7;
+    font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.5em;
+    text-wrap: balance;
+  }
+  h1 { font-size: clamp(2rem, 1.3rem + 2.6vw, 3rem); }
+  a { color: var(--link); }
+
+  .container { width: 100%; max-width: var(--wide); margin: 0 auto; padding-inline: 1.25rem; }
+  .kicker {
+    display: inline-block; font-family: var(--sans); font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+  }
+  .kicker--tab { border-bottom: 2.5px solid var(--accent); padding-bottom: 0.2rem; }
+  .standfirst { font-size: 1.2rem; line-height: 1.5; color: var(--fg); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---- site header (Header.astro) ---- */
+  .site-header {
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    border-bottom: var(--rule);
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 50;
+    backdrop-filter: saturate(1.1) blur(8px);
+  }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; padding-top: 0.8rem; padding-bottom: 0.8rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+  .brand-mark { width: 34px; height: 34px; border: 1.5px solid var(--rule-strong); border-radius: 50%; flex: none; }
+  .brand-name {
+    font-family: var(--serif); font-weight: 600; font-size: 1.02rem;
+    letter-spacing: -0.01em; line-height: 1.1; color: var(--fg); max-width: 12rem;
+  }
+  .site-header nav ul {
+    display: flex; align-items: center; gap: 1.3rem;
+    list-style: none; margin: 0; padding: 0; flex-wrap: wrap;
+  }
+  .site-header nav .navitem {
+    font-family: var(--sans); font-weight: 700; font-size: 0.78rem;
+    letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+    color: var(--muted); padding-bottom: 2px; border-bottom: 2px solid transparent;
+  }
+  a.navitem:hover { color: var(--fg); }
+  .site-header nav .navitem[aria-current='page'] { color: var(--accent); border-bottom-color: var(--accent); }
+  .nav-ext { position: relative; }
+  .ext-mark {
+    position: absolute; left: 50%; top: calc(100% + 1px); transform: translateX(-50%);
+    font-size: 0.58rem; line-height: 1; color: var(--accent);
+  }
+  .btn {
+    display: inline-block; font-family: var(--sans); font-weight: 700; font-size: 0.85rem;
+    letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+    padding: 0.7rem 1.3rem; border: 1.5px solid var(--fg); background: transparent; color: var(--fg);
+  }
+  .btn--accent { border-color: var(--accent); background: var(--accent); color: var(--bg); }
+  .btn-donate { padding: 0.45rem 1rem; font-size: 0.76rem; }
+
+  /* ---- site footer (Footer.astro) ---- */
+  .site-footer { margin-top: 4rem; border-top: 2px solid var(--fg); background: var(--bg); }
+  .footer-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2rem; padding-top: 2.5rem; padding-bottom: 3rem;
+  }
+  .footer-brand { font-family: var(--serif); font-weight: 600; font-size: 1.1rem; line-height: 1.15; margin-bottom: 0.5rem; }
+  .footer-legal { font-size: 0.85rem; color: var(--muted); margin: 0; }
+  .footer-head {
+    font-family: var(--sans); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 0.6rem;
+  }
+  .site-footer ul { list-style: none; margin: 0; padding: 0; }
+  .site-footer li { margin-bottom: 0.45rem; font-size: 0.92rem; }
+  .site-footer a, .site-footer .navitem { color: var(--fg); }
+
+  .rl { padding-block: 1.6rem 3.5rem; }
+  .rl-shelf, .rl-book { scroll-margin-top: calc(var(--header-h, 3.9rem) + 1rem); }
+  .rl-book[hidden], .rl-empty[hidden], .rl-picks-bar[hidden] { display: none; }
+  .rl-sample {
+    font-family: var(--sans); font-size: 0.86rem; line-height: 1.5;
+    background: var(--inset); border-left: 3px solid var(--honey-bright);
+    padding: 0.7rem 1rem; margin: 0 0 1.6rem;
+  }
+  .rl-textbtn {
+    font: inherit; font-weight: 600; color: var(--link); background: none; border: 0; padding: 0; cursor: pointer;
+    text-decoration: underline; text-underline-offset: 2.5px; text-decoration-thickness: 0.7px;
+  }
+  .rl-textbtn:hover { color: var(--accent); }
+  .rl-btn {
+    font-family: var(--sans); font-size: 0.78rem; font-weight: 700; color: var(--fg);
+    background: transparent; border: 1px solid var(--fg); padding: 0.35rem 0.7rem; cursor: pointer;
+  }
+  .rl-btn:hover { background: var(--fg); color: var(--bg); }
+
+  /* ---- head ---- */
+  .rl-head { display: grid; grid-template-columns: minmax(0, 1fr) 16rem; gap: 1.5rem 3rem; align-items: end; padding-block: 1rem 2rem; }
+  .rl-crumb { font-family: var(--sans); font-size: 0.78rem; color: var(--muted); margin: 0 0 1rem; }
+  .rl-head h1 { max-width: 15em; }
+  .rl-head .standfirst { max-width: 36rem; margin: 0.8rem 0 0; }
+  .rl-dek { font-size: 1.02rem; line-height: 1.55; color: var(--muted); max-width: 36rem; margin: 0.7rem 0 0; }
+  .rl-ledger { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
+  .rl-ledger::before { content: ""; display: block; height: 6px; border-top: 2.5px solid var(--fg); border-bottom: 1px solid var(--fg); margin-bottom: 0.7rem; }
+  .rl-ledger-row { display: flex; justify-content: space-between; gap: 1rem; border-bottom: var(--rule); padding-block: 0.4rem; }
+  .rl-ledger-row span:last-child { font-weight: 700; color: var(--fg); font-variant-numeric: tabular-nums; }
+  .rl-ledger p { margin: 0.6rem 0 0; line-height: 1.45; }
+
+  /* ---- age and category scale ---- */
+  .rl-ages { border-block: 1px solid var(--rule-strong); padding-block: 1.3rem 1.1rem; }
+  .rl-ages-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem 1rem; margin-bottom: 0.9rem; }
+  .rl-ages-top h2 { font-family: var(--sans); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; margin: 0; }
+  .rl-ages-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.4rem; }
+  .rl-ages-controls p { margin: 0; font-family: var(--sans); font-size: 0.82rem; color: var(--muted); }
+  .rl-ra { display: inline-flex; align-items: center; gap: 0.45rem; font-family: var(--sans); font-size: 0.86rem; font-weight: 700; cursor: pointer; border: 1px solid var(--fg); padding: 0.3rem 0.7rem; }
+  .rl-ra input, .rl-opt input { margin: 0; width: 0.95rem; height: 0.95rem; accent-color: var(--accent); }
+  .rl-lane { position: relative; height: 2.8rem; margin-bottom: 0.3rem; }
+  .rl-band {
+    position: absolute; top: 0; height: 100%; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 0 0.75rem; text-align: left; font-family: var(--sans); color: var(--fg); cursor: pointer;
+    background: var(--surface); border: 1px solid var(--rule-strong);
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .rl-band:hover { border-color: var(--fg); }
+  .rl-band[aria-pressed="true"] { background: var(--deep); border-color: var(--deep); color: #FFFFFF; }
+  .rl-band-name { font-weight: 700; font-size: 0.9rem; line-height: 1.15; white-space: nowrap; }
+  .rl-band-meta { font-size: 0.72rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .rl-band[aria-pressed="true"] .rl-band-meta { color: #B7BEC6; }
+  .rl-band--open::after { content: "\2192"; position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%); opacity: 0.6; }
+  .rl-ticks { position: relative; height: 1.4rem; border-top: 1px solid var(--fg); margin-top: 0.3rem; }
+  .rl-tick { position: absolute; top: 0; transform: translateX(-50%); font-family: var(--sans); font-size: 0.7rem; line-height: 1.4; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .rl-tick::before { content: ""; display: block; width: 1px; height: 5px; background: var(--fg); margin: 0 auto 1px; }
+  .rl-scale-cap { font-family: var(--sans); font-size: 0.72rem; color: var(--faint); margin: 0.1rem 0 0; }
+  .rl-desc { font-size: 0.98rem; margin: 0.8rem 0 0; max-width: 46rem; }
+  .rl-desc:empty { display: none; }
+  .rl-desc strong { font-family: var(--sans); font-size: 0.86rem; }
+
+  /* ---- shelf ---- */
+  .rl-shelf { display: grid; grid-template-columns: 14.5rem minmax(0, 1fr); gap: 2.8rem; padding-block: 2rem 3rem; }
+  .rl-rail { display: flex; flex-direction: column; gap: 1.6rem; align-self: start; }
+  .rl-facet { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .rl-facet legend, .rl-legend {
+    display: block; width: 100%; font-family: var(--sans); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 0 0 0.5rem; border-bottom: 1px solid var(--fg); margin-bottom: 0.4rem;
+  }
+  .rl-opt { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.55rem; padding: 0.22rem 0; font-family: var(--sans); font-size: 0.86rem; cursor: pointer; }
+  .rl-n { font-size: 0.74rem; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .rl-opt--zero { color: var(--faint); }
+  .rl-facet select {
+    width: 100%; font-family: var(--sans); font-size: 0.86rem; color: var(--fg); cursor: pointer;
+    background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 0; padding: 0.4rem 0.55rem;
+  }
+  .rl-facet--quiet legend { color: var(--muted); font-weight: 700; border-bottom-color: var(--rule-strong); }
+  .rl-facet--quiet .rl-opt { font-size: 0.8rem; color: var(--muted); }
+  .rl-hint { font-family: var(--sans); font-size: 0.74rem; line-height: 1.45; color: var(--faint); margin: 0.35rem 0 0; }
+
+  .rl-results-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0.6rem 1.5rem; padding-bottom: 0.7rem; border-bottom: 2.5px solid var(--fg); }
+  .rl-count { font-size: 1.5rem; margin: 0; }
+  .rl-disclosure { font-family: var(--sans); font-size: 0.76rem; color: var(--muted); padding-block: 0.55rem; border-bottom: 1px solid var(--rule-strong); margin: 0; }
+  .rl-summary { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); margin: 0.3rem 0 0; }
+
+  .rl-books { list-style: none; margin: 0; padding: 0; }
+  .rl-book { display: grid; grid-template-columns: minmax(0, 1fr) 9.5rem; gap: 0.4rem 2rem; padding-block: 1.35rem; border-bottom: var(--rule); }
+  .rl-title { font-size: 1.28rem; line-height: 1.2; margin: 0; }
+  .rl-byline { font-family: var(--sans); font-size: 0.84rem; color: var(--muted); margin: 0.25rem 0 0; }
+  .rl-series { font-family: var(--sans); font-size: 0.8rem; line-height: 1.5; color: var(--muted); margin: 0.35rem 0 0; }
+  .rl-series strong { color: var(--fg); font-weight: 600; }
+  .rl-review { font-style: italic; font-size: 1rem; line-height: 1.6; max-width: 40rem; margin: 0.6rem 0 0; }
+  .rl-tags {
+    display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; margin: 0.75rem 0 0; padding: 0; list-style: none;
+    font-family: var(--sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+  }
+  .rl-tags li { margin: 0; }
+  .rl-tag--key { color: var(--fg); border: 1px solid var(--fg); padding: 0 0.4rem; }
+  .rl-tag--mature { color: var(--alert); }
+  .rl-tag--appeal { text-transform: none; letter-spacing: 0; font-weight: 500; font-style: italic; color: var(--faint); }
+  .rl-credit { font-family: var(--sans); font-size: 0.78rem; color: var(--faint); margin: 0.55rem 0 0; }
+  .rl-credit span { color: var(--fg); font-weight: 600; }
+  .rl-book-actions { display: flex; flex-direction: column; align-items: stretch; gap: 0.3rem; padding-top: 0.2rem; }
+  .rl-pick {
+    font-family: var(--sans); font-size: 0.8rem; font-weight: 700; color: var(--honey); background: transparent;
+    border: 1px solid var(--honey); padding: 0.45rem 0.6rem; cursor: pointer;
+  }
+  .rl-pick:hover, .rl-pick[aria-pressed="true"] { background: var(--honey); color: #FFFFFF; }
+
+  .rl-out { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; text-align: center; text-decoration: none; color: var(--fg); border: 1px solid var(--fg); padding: 0.45rem 0.6rem; }
+  .rl-out:hover { background: var(--fg); color: var(--bg); }
+  .rl-out--alt { border-color: var(--rule-strong); font-weight: 600; margin-top: 0.35rem; }
+  .rl-out-note { font-family: var(--sans); font-size: 0.7rem; color: var(--faint); text-align: center; }
+
+  .rl-empty { padding-block: 2.4rem 2rem; border-bottom: var(--rule); max-width: 36rem; }
+  .rl-empty p { color: var(--muted); margin: 0.6rem 0 1rem; }
+  .rl-empty-actions { display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem; align-items: center; font-family: var(--sans); font-size: 0.86rem; font-weight: 600; }
+
+  /* ---- what's on the list ---- */
+  .rl-kinds { border-top: 2.5px solid var(--fg); padding-block: 1.6rem 1rem; display: grid; gap: 1.8rem; }
+  .rl-kinds h2 { margin: 0; }
+  .rl-kinds-intro { font-size: 1.08rem; line-height: 1.5; max-width: 38rem; margin: -0.8rem 0 0; }
+  .rl-kinds h3 { font-family: var(--sans); font-size: 0.74rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding-bottom: 0.5rem; border-bottom: 1px solid var(--rule-strong); margin: 0; }
+  .rl-kinds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 0 2.4rem; margin: 0; }
+  .rl-kinds-grid > div { padding-block: 0.85rem; border-bottom: var(--rule); }
+  .rl-kinds-grid dd { margin: 0.2rem 0 0; font-size: 0.95rem; line-height: 1.55; }
+  .rl-kind { font-family: var(--serif); font-size: 1.12rem; font-weight: 600; color: var(--fg); background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+  .rl-kind::after { content: " \2192"; font-family: var(--sans); font-size: 0.85rem; color: var(--faint); }
+  .rl-kind:hover, .rl-kind:hover::after { color: var(--accent); }
+
+  /* ---- suggest ---- */
+  .field--deep { background: var(--deep); color: #F2F4F6; }
+  .rl-suggest-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 2rem 3.5rem; padding-block: 3rem; }
+  .rl-suggest h2 { color: #F2F4F6; }
+  .rl-suggest .kicker { color: var(--honey-bright); }
+  .rl-suggest p { color: #D9D4C9; max-width: 32rem; }
+  .rl-soon { font-family: var(--sans); font-weight: 700; }
+  .rl-steps { list-style: none; counter-reset: step; margin: 0; padding: 0; font-family: var(--sans); font-size: 0.9rem; border-top: 1px solid #333E49; }
+  .rl-steps li { counter-increment: step; display: grid; grid-template-columns: 1.8rem 1fr; padding-block: 0.75rem; border-bottom: 1px solid #333E49; color: #C2C9D0; line-height: 1.45; }
+  .rl-steps li::before { content: counter(step); color: var(--honey-bright); font-weight: 700; }
+  .rl-steps strong { color: #F2F4F6; }
+  .rl-sibling { font-family: var(--sans); font-size: 0.88rem; color: var(--muted); padding-block: 1.6rem; margin: 0; }
+
+  /* ---- my list ---- */
+  .rl-picks-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: var(--deep); color: #FFFFFF;
+    font-family: var(--sans); font-size: 0.86rem; font-weight: 700;
+    padding-block: 0.65rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
+  }
+  .rl-picks-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; }
+  .rl-picks-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .rl-picks-actions button { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; color: var(--bg); background: transparent; border: 1px solid var(--faint); padding: 0.35rem 0.7rem; cursor: pointer; }
+  .rl-picks-actions button:hover { border-color: var(--bg); }
+  .rl-picks-actions .rl-picks-clear { border-color: transparent; color: #B7BEC6; }
+  body.rl-has-picks { padding-bottom: 4.5rem; }
+
+  @media (max-width: 900px) {
+    .rl-head { grid-template-columns: 1fr; }
+    .rl-shelf { grid-template-columns: 1fr; gap: 1.8rem; }
+    .rl-rail { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1.4rem 2rem; }
+    .rl-suggest-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 620px) {
+    .rl-book { grid-template-columns: 1fr; }
+    .rl-book-actions { flex-direction: row; flex-wrap: wrap; align-items: center; }
+    .rl-band { padding: 0 0.35rem; }
+    .rl-band-name { font-size: 0.72rem; white-space: normal; }
+    .rl-band-meta, .rl-band--open::after { display: none; }
+    .rl-tick:nth-child(even) { visibility: hidden; }
+  }
+  @media (prefers-reduced-motion: reduce) { .rl-band { transition: none; } }
+</style>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <span class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">[ Your organization ]</span>
+    </span>
+    <nav aria-label="Main">
+      <ul>
+        <li><span class="navitem">Home</span></li>
+        <li><span class="navitem" aria-current="page">Library</span></li>
+        <li><span class="navitem">About</span></li>
+        <li><span class="btn btn--accent btn-donate">Support</span></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container rl">
+  <p class="rl-sample" role="note">
+    <strong>Design mockup.</strong> The Amazon links carry a placeholder tag and earn nothing. The site
+    header and footer are shown for context; their links are inert here.
+  </p>
+
+  <header class="rl-head">
+    <div>
+      <p class="rl-crumb">Library <span aria-hidden="true">/</span> Books for developing readers</p>
+      <span class="kicker kicker--tab">A reviewed reading list</span>
+      <h1>Books that build what children know</h1>
+      <p class="standfirst">
+        Knowledge-rich books for developing readers, from picture books to books for older teens. Each has a
+        short review from the teacher, educator or parent who recommended it.
+      </p>
+      <p class="rl-dek">
+        Most are nonfiction that children enjoy, such as comic-book histories. The novels teach something real
+        too, such as what happened during a historical event. Many are books you may not know yet.
+      </p>
+      <p class="rl-dek">
+        Stories, poems and myths show what it means to be human. We include enduring fables because they shape
+        our civic life, and we do not shy away from tough topics.
+      </p>
+    </div>
+    <aside class="rl-ledger" aria-label="About this list">
+      <div class="rl-ledger-row"><span>Books on the list</span><span id="rl-total">14</span></div>
+      <div class="rl-ledger-row"><span>Approved by</span><span>Editors</span></div>
+      <p>Every book is approved by an editor before it appears.</p>
+    </aside>
+  </header>
+
+  <section class="rl-ages" aria-labelledby="rl-ages-h">
+    <div class="rl-ages-top">
+      <h2 id="rl-ages-h">Age and category</h2>
+      <div class="rl-ages-controls">
+        <label class="rl-ra" for="rl-readaloud">
+          <input type="checkbox" id="rl-readaloud"> Good to read aloud
+        </label>
+        <p>Choose a category, or <button type="button" class="rl-textbtn" id="rl-all">show all</button></p>
+      </div>
+    </div>
+    <div class="rl-scale">
+      <div class="rl-lane" id="rl-lane-0"></div>
+      <div class="rl-lane" id="rl-lane-1"></div>
+      <div class="rl-lane" id="rl-lane-2"></div>
+      <div class="rl-ticks" id="rl-ticks" aria-hidden="true"></div>
+      <p class="rl-scale-cap">Ages are based on content, such as violence and mature themes.</p>
+    </div>
+    <p class="rl-desc" id="rl-desc" aria-live="polite"></p>
+  </section>
+
+  <div class="rl-shelf" id="rl-shelf">
+    <aside class="rl-rail" aria-label="Filters">
+      <fieldset class="rl-facet"><legend>Subject</legend><div id="rl-f-domain"></div></fieldset>
+      <fieldset class="rl-facet"><legend>Format</legend><div id="rl-f-format"></div></fieldset>
+      <fieldset class="rl-facet"><legend>Kind of book</legend><div id="rl-f-form"></div></fieldset>
+      <fieldset class="rl-facet"><legend>How it&rsquo;s used</legend><div id="rl-f-use"></div></fieldset>
+      <div class="rl-facet">
+        <label class="rl-legend" for="rl-reviewer">Reviewer</label>
+        <select id="rl-reviewer"></select>
+      </div>
+      <fieldset class="rl-facet rl-facet--quiet">
+        <legend>Often popular</legend>
+        <div id="rl-f-appeal"></div>
+        <p class="rl-hint">Optional. Most books have none of these. A tag means the book is often a favorite there, not that it is only for that group.</p>
+      </fieldset>
+    </aside>
+
+    <section class="rl-results" aria-labelledby="rl-count">
+      <div class="rl-results-head">
+        <div>
+          <h2 class="rl-count" id="rl-count" aria-live="polite">14 books</h2>
+          <p class="rl-summary" id="rl-summary">All ages</p>
+        </div>
+        <button type="button" class="rl-btn" id="rl-copy-view">Copy link to this view</button>
+      </div>
+
+      <ul class="rl-books" id="rl-books"></ul>
+
+      <div class="rl-empty" id="rl-empty" hidden>
+        <h3 id="rl-empty-title">No books yet.</h3>
+        <p>If you know a book that fits, please suggest it.</p>
+        <p class="rl-empty-actions">
+          <a href="#rl-suggest">Suggest a book</a>
+          <button type="button" class="rl-btn" id="rl-clear">Clear filters</button>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <section class="rl-kinds" aria-labelledby="rl-kinds-h">
+    <h2 id="rl-kinds-h">What&rsquo;s on the list</h2>
+    <p class="rl-kinds-intro">
+      You won&rsquo;t find <em>The Giver</em>, <em>Bridge to Terabithia</em> or <em>The Hobbit</em> here. We love those
+      books, and they are great for building vocabulary, but this list is for books that build knowledge of the world.
+    </p>
+    <div>
+      <h3>Subjects</h3>
+      <dl class="rl-kinds-grid" id="rl-kinds-domain"></dl>
+    </div>
+    <div>
+      <h3>Kinds of book</h3>
+      <dl class="rl-kinds-grid" id="rl-kinds-form"></dl>
+    </div>
+  </section>
+</div>
+
+<section class="field--deep rl-suggest" id="rl-suggest" aria-labelledby="rl-suggest-h">
+  <div class="container rl-suggest-grid">
+    <div>
+      <span class="kicker">Contribute</span>
+      <h2 id="rl-suggest-h">Know a book that belongs here?</h2>
+      <p>
+        Tell us the title and what a reader will learn from it. We publish your review with the book and credit
+        it to your role. We may edit it for clarity and content.
+      </p>
+      <p class="rl-soon">Suggestions open soon.</p>
+    </div>
+    <ol class="rl-steps">
+      <li><strong>You suggest a book</strong> using a short form.</li>
+      <li><strong>An editor reviews it</strong> before it appears here.</li>
+      <li><strong>It&rsquo;s published with your review,</strong> credited like this: &ldquo;Review by a parent.&rdquo;</li>
+    </ol>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <p class="footer-brand">[ Your organization ]</p>
+      <p class="footer-legal">
+        [ Legal identifiers go here ]<br>
+        © 2026
+      </p>
+    </div>
+    <nav aria-label="Footer">
+      <p class="footer-head">Site</p>
+      <ul>
+        <li><span class="navitem">Library</span></li>
+        <li><span class="navitem">About</span></li>
+        <li><span class="navitem">Support</span></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="footer-head">Contact</p>
+      <ul>
+        <li><span class="navitem">[ contact address ]</span></li>
+        <li><span class="navitem">[ press address ]</span></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<div class="rl-picks-bar" id="rl-picks-bar" hidden>
+  <div class="container rl-picks-inner">
+    <span id="rl-picks-count"></span>
+    <div class="rl-picks-actions">
+      <button type="button" id="rl-picks-view">View my list</button>
+      <button type="button" id="rl-picks-share">Copy link</button>
+      <button type="button" id="rl-picks-clear" class="rl-picks-clear">Clear</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Vocabulary — src/data/books-vocabulary.json */
+var V = {
+  read_aloud_description: "Books for an adult to read to a child. Children understand harder words and bigger ideas by listening than they can read on their own, so these books can aim higher.",
+  category: [
+    {"value": "picture-books", "label": "Picture books", "from": 3, "to": 7, "description": "Illustrated books, usually read to a child by an adult."},
+    {"value": "easy-readers", "label": "Easy readers", "from": 5, "to": 7, "description": "Short, simple books for a child learning to read on their own."},
+    {"value": "chapter-books", "label": "Chapter books", "from": 7, "to": 9, "description": "First books with chapters \u2014 short, larger type, for a newly independent reader."},
+    {"value": "middle-grade", "label": "Middle grade", "from": 9, "to": 12, "description": "Longer books for a confident independent reader."},
+    {"value": "young-adult", "label": "Young adult", "from": 12, "to": 15, "description": "Longer books for teen readers."},
+    {"value": "new-adult", "label": "New adult", "from": 15, "to": null, "mature": true, "description": "Books for older teens that include sexual content. Reading difficulty alone does not put a book here \u2014 a hard book with none of it belongs in young adult."}
+  ],
+  domain: [
+    { value: "science", label: "Science", description: "Biology, chemistry, earth science, physics and engineering. Biology books may describe reproduction and anatomy in factual terms." },
+    { value: "history", label: "History", description: "Past peoples and events. These books may show violence, slavery and war." },
+    { value: "civics", label: "Civics", description: "How people govern themselves: laws, rights and citizenship." },
+    { value: "geography", label: "Geography", description: "Places, maps, and how people live around the world." },
+    { value: "mythology", label: "Mythology", description: "Myths, legends and fables from around the world." },
+    { value: "biography", label: "Biography", description: "True stories of real lives." },
+    { value: "literature", label: "Literature", description: "Novels, stories and poems." },
+    { value: "mathematics", label: "Mathematics", description: "Numbers, shapes and patterns." },
+    { value: "art-and-music", label: "Art and music", description: "How art and music are made, and who made them." }
+  ],
+  format: [
+    { value: "graphic-novel", label: "Graphic novel or comic" },
+    { value: "illustrated-book", label: "Illustrated book" }
+  ],
+  form: [
+    { value: "nonfiction", label: "Nonfiction", description: "Factual books about real people, events and ideas." },
+    { value: "fiction", label: "Fiction", description: "Stories that teach something real, such as a historical event, a scientific idea or a work of art." },
+    { value: "poetry", label: "Poetry", description: "Poems and verse." },
+    { value: "reference", label: "Reference", description: "Books to look things up in, such as atlases." }
+  ],
+  use: [
+    { value: "read-aloud", label: "Good to read aloud" },
+    { value: "independent", label: "Independent reading" },
+    { value: "class-set", label: "Class set" },
+    { value: "reference", label: "Reference shelf" }
+  ],
+  appeal: [
+    { value: "boys", label: "Often popular with boys" },
+    { value: "girls", label: "Often popular with girls" },
+    { value: "classrooms", label: "Often popular in classrooms" }
+  ],
+  reviewer_role: [
+    { value: "teacher", label: "Teacher" },
+    { value: "educator", label: "Educator" },
+    { value: "parent", label: "Parent" },
+    { value: "other", label: "Other" }
+  ]
+};
+
+/* Libby, the library-borrowing app. One address for every book, so no
+   book stores a copy of it. */
+var LIBBY_URL = "https://libbyapp.com/";
+
+/* Books — src/content/books/*.md */
+var BOOKS = [
+  {"title": "Actual Size", "author": "Steve Jenkins", "category": "picture-books", "domain": ["science", "mathematics"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Animals printed at life size, so a child can lay a hand against a gorilla's. Scale taught by direct comparison.", "reviewer_role": "educator", "year": 2004, "id": "actual-size"},
+  {"title": "Addy Learns a Lesson", "author": "Connie Porter", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Addy starts school in Philadelphia after escaping slavery, and finds the North is not the place she was promised.", "reviewer_role": "educator", "series": "American Girl", "id": "addy-learns-a-lesson"},
+  {"title": "Afternoon on the Amazon", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["science", "geography"], "form": "fiction", "use": ["independent"], "review": "The rainforest canopy and floor, and the animals at each level.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "afternoon-on-the-amazon"},
+  {"title": "Air Is All Around You", "author": "Franklyn M. Branley", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "That air is a substance with weight, shown with a glass and a bowl of water.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "air-is-all-around-you"},
+  {"title": "An American Plague", "author": "Jim Murphy", "category": "middle-grade", "domain": ["history", "science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Yellow fever in Philadelphia in 1793, when nobody knew what caused it. Shows a city and a government failing in real time.", "reviewer_role": "educator", "year": 2003, "id": "an-american-plague"},
+  {"title": "Ashes", "author": "Laurie Halse Anderson", "category": "middle-grade", "domain": ["history", "civics"], "form": "fiction", "use": ["independent"], "review": "The series closes at Yorktown, with the question of who the new country's freedom was for.", "reviewer_role": "educator", "year": 2016, "series": "Seeds of America", "id": "ashes"},
+  {"title": "Between Shades of Gray", "author": "Ruta Sepetys", "category": "young-adult", "domain": ["history", "civics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A Lithuanian family deported to Siberia in 1941. The Soviet deportations, rarely taught.", "reviewer_role": "educator", "year": 2011, "id": "between-shades-of-gray"},
+  {"title": "Blizzard!", "author": "Jim Murphy", "category": "middle-grade", "domain": ["history", "science"], "form": "nonfiction", "use": ["independent"], "review": "The blizzard of 1888 that buried the Northeast, and what it changed about cities and forecasting.", "reviewer_role": "educator", "year": 2000, "id": "blizzard"},
+  {"title": "Bomb", "author": "Steve Sheinkin", "category": "young-adult", "domain": ["history", "science"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "The race to build the atomic bomb, and the spies who tried to steal it. Covers the physics, the wartime politics and the start of the Cold War.", "reviewer_role": "educator", "year": 2012, "id": "bomb"},
+  {"title": "Bones", "author": "Stephen Krensky", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The skeleton, what bones do, and how they mend.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "bones"},
+  {"title": "The Book Thief", "author": "Markus Zusak", "category": "young-adult", "domain": ["history", "literature"], "form": "fiction", "use": ["independent", "class-set"], "review": "A girl growing up in Nazi Germany steals books and shares them with the Jewish man her family is hiding in their basement.", "reviewer_role": "educator", "year": 2005, "id": "the-book-thief"},
+  {"title": "The Boy on the Wooden Box", "author": "Leon Leyson", "category": "middle-grade", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The youngest person on Schindler's list tells his own story. A way into the Holocaust for readers not ready for Night.", "reviewer_role": "educator", "year": 2013, "id": "the-boy-on-the-wooden-box"},
+  {"title": "The Boy Who Harnessed the Wind: Young Readers Edition", "author": "William Kamkwamba and Bryan Mealer", "category": "middle-grade", "domain": ["science", "geography", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A Malawian teenager builds a windmill from scrap during a famine, working from a library textbook. Real engineering, done by a child.", "reviewer_role": "educator", "year": 2015, "id": "the-boy-who-harnessed-the-wind-young-readers-edition"},
+  {"title": "The Boy Who Loved Math", "author": "Deborah Heiligman", "category": "picture-books", "domain": ["mathematics", "biography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Paul Erdos, who had no home and no job and did mathematics with everyone. Real number theory sits in the pictures.", "reviewer_role": "educator", "year": 2013, "id": "the-boy-who-loved-math"},
+  {"title": "The Boys in the Boat (Young Readers Adaptation)", "author": "Daniel James Brown", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Washington's rowing crew at the 1936 Berlin Olympics, and the Depression that shaped them.", "reviewer_role": "educator", "year": 2015, "id": "the-boys-in-the-boat-young-readers-adaptation"},
+  {"title": "The Calder Game", "author": "Blue Balliett", "category": "middle-grade", "domain": ["art-and-music"], "form": "fiction", "use": ["independent"], "review": "A boy and an Alexander Calder sculpture vanish from an English village on the same night. The book teaches what Calder made and why a mobile balances.", "reviewer_role": "educator", "year": 2008, "series": "Chasing Vermeer", "id": "the-calder-game"},
+  {"title": "Castle", "author": "David Macaulay", "category": "middle-grade", "domain": ["history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A Welsh castle and its town built from nothing, drawn stage by stage. Explains why a castle is shaped the way it is.", "reviewer_role": "educator", "year": 1977, "format": "illustrated-book", "id": "castle"},
+  {"title": "Cathedral: The Story of Its Construction", "author": "David Macaulay", "category": "middle-grade", "domain": ["history", "art-and-music"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "How a Gothic cathedral was raised over a century, and why the flying buttresses are there.", "reviewer_role": "educator", "year": 1973, "format": "illustrated-book", "id": "cathedral-the-story-of-its-construction"},
+  {"title": "Chains", "author": "Laurie Halse Anderson", "category": "middle-grade", "domain": ["history", "civics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "An enslaved girl in New York during the Revolution, spying for a side that will not free her. Puts liberty and slavery in the same frame, which the period demands.", "reviewer_role": "educator", "year": 2008, "series": "Seeds of America", "id": "chains"},
+  {"title": "Changes for Addy", "author": "Connie Porter", "category": "chapter-books", "domain": ["history", "civics"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "The war ends and Addy's family tries to reunite. Honest about what emancipation did and did not deliver.", "reviewer_role": "educator", "series": "American Girl", "id": "changes-for-addy"},
+  {"title": "Changes for Felicity", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history", "civics"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Williamsburg divides as war comes, and Felicity's family and her loyalist friend are split by it.", "reviewer_role": "educator", "series": "American Girl", "id": "changes-for-felicity"},
+  {"title": "Changes for Josefina", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history", "geography"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Trade with the Americans changes the rancho. Shows a frontier from the Mexican side of it.", "reviewer_role": "educator", "series": "American Girl", "id": "changes-for-josefina"},
+  {"title": "Changes for Kirsten", "author": "Janet Shaw", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Fire destroys the family's cabin and they rebuild. A clear picture of how precarious a homestead was.", "reviewer_role": "educator", "series": "American Girl", "id": "changes-for-kirsten"},
+  {"title": "Changes for Molly", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "The war ends and Molly's father comes home. Good on what returning actually looked like.", "reviewer_role": "educator", "series": "American Girl", "id": "changes-for-molly"},
+  {"title": "Chasing Lincoln's Killer", "author": "James L. Swanson", "category": "young-adult", "domain": ["history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The twelve days between Lincoln's assassination and Booth's death, reconstructed from the record and paced like a thriller.", "reviewer_role": "educator", "year": 2009, "id": "chasing-lincolns-killer"},
+  {"title": "Chasing Vermeer", "author": "Blue Balliett", "category": "middle-grade", "domain": ["art-and-music", "mathematics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Two sixth graders try to find a stolen Vermeer painting. Readers learn about Vermeer and his work, and the clues use pentominoes and codes.", "reviewer_role": "educator", "year": 2004, "series": "Chasing Vermeer", "id": "chasing-vermeer"},
+  {"title": "Children of the Great Depression", "author": "Russell Freedman", "category": "middle-grade", "domain": ["history"], "form": "nonfiction", "use": ["independent"], "review": "The 1930s through the children who lived it, with the documentary photographs of the period.", "reviewer_role": "educator", "year": 2005, "id": "children-of-the-great-depression"},
+  {"title": "City: A Story of Roman Planning and Construction", "author": "David Macaulay", "category": "middle-grade", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent"], "review": "How the Romans laid out a city, from the survey lines to the aqueduct and sewers.", "reviewer_role": "educator", "year": 1974, "format": "illustrated-book", "id": "city-a-story-of-roman-planning-and-construction"},
+  {"title": "Civil War on Sunday", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "review": "A field hospital at a Civil War battle, and Clara Barton's nursing.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "civil-war-on-sunday"},
+  {"title": "Code Talker", "author": "Joseph Bruchac", "category": "young-adult", "domain": ["history", "civics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A Navajo marine whose language, punished at boarding school, became an unbreakable code in the Pacific.", "reviewer_role": "educator", "year": 2005, "id": "code-talker"},
+  {"title": "Cross-Sections: Man-of-War", "author": "Stephen Biesty and Richard Platt", "category": "middle-grade", "domain": ["history", "science"], "form": "reference", "use": ["reference", "independent"], "appeal": ["boys"], "review": "One eighteenth-century warship, deck by deck, with where the crew slept, ate and fought. The inside-the-ship book.", "reviewer_role": "educator", "year": 1993, "format": "illustrated-book", "id": "cross-sections-man-of-war"},
+  {"title": "D'Aulaires' Book of Greek Myths", "author": "Ingri and Edgar Parin d'Aulaire", "category": "middle-grade", "domain": ["mythology", "literature"], "form": "nonfiction", "use": ["read-aloud", "independent", "class-set"], "appeal": ["classrooms"], "review": "The Greek gods and heroes in one volume, illustrated. The reference most later reading assumes a child already has.", "reviewer_role": "educator", "year": 1962, "id": "daulaires-book-of-greek-myths"},
+  {"title": "D'Aulaires' Book of Norse Myths", "author": "Ingri and Edgar Parin d'Aulaire", "category": "middle-grade", "domain": ["mythology", "literature"], "form": "nonfiction", "use": ["read-aloud", "independent"], "review": "Odin, Thor and the road to Ragnarok, told the same way as their Greek myths.", "reviewer_role": "educator", "year": 1967, "id": "daulaires-book-of-norse-myths"},
+  {"title": "The Danger Box", "author": "Blue Balliett", "category": "middle-grade", "domain": ["science", "history"], "form": "fiction", "use": ["independent"], "review": "A boy in a small town works out that a stolen notebook belonged to Charles Darwin. Carries a real sense of how a naturalist records what he sees.", "reviewer_role": "educator", "year": 2010, "id": "the-danger-box"},
+  {"title": "The Devil's Arithmetic", "author": "Jane Yolen", "category": "middle-grade", "domain": ["history"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A girl bored by her family's remembering is pulled back into a Polish village in 1942. Written to answer the question of why remembering matters.", "reviewer_role": "educator", "year": 1988, "id": "the-devils-arithmetic"},
+  {"title": "The Diary of a Young Girl", "author": "Anne Frank", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Two years in a hidden annexe in Amsterdam, written by a girl who did not survive. The first-hand account most readers meet first.", "reviewer_role": "educator", "year": 1947, "id": "the-diary-of-a-young-girl"},
+  {"title": "Digging Up Dinosaurs", "author": "Aliki", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "What a dig actually involves, and the work that happens after the bones come out.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "digging-up-dinosaurs"},
+  {"title": "Dolphins at Daybreak", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["science"], "form": "fiction", "use": ["independent"], "review": "Coral reefs, dolphins and the ocean's layers, from a mini-submarine.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "dolphins-at-daybreak"},
+  {"title": "A Drop of Blood", "author": "Paul Showers", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "What blood is made of and what each part does.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "a-drop-of-blood"},
+  {"title": "A Drop of Water", "author": "Walter Wick", "category": "picture-books", "domain": ["science"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Water photographed in the act of splashing, freezing and evaporating. Surface tension made visible.", "reviewer_role": "educator", "year": 1997, "id": "a-drop-of-water"},
+  {"title": "Earthquakes", "author": "Franklyn M. Branley", "category": "easy-readers", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Faults and the shaking they cause, with what the measurements mean.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "earthquakes"},
+  {"title": "An Egg Is Quiet", "author": "Dianna Hutts Aston", "category": "picture-books", "domain": ["science"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Eggs of every kind, painted and labelled, with what hatches from each.", "reviewer_role": "educator", "year": 2006, "id": "an-egg-is-quiet"},
+  {"title": "The Elements: A Visual Exploration", "author": "Theodore Gray", "category": "middle-grade", "domain": ["science"], "form": "reference", "use": ["reference"], "review": "Every element in the periodic table, photographed. Makes chemistry concrete before a child has taken a chemistry class.", "reviewer_role": "educator", "year": 2009, "format": "illustrated-book", "id": "the-elements-a-visual-exploration"},
+  {"title": "Farewell to Manzanar", "author": "Jeanne Wakatsuki Houston", "category": "young-adult", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A Japanese American family interned in California during the war, told by the daughter who grew up there.", "reviewer_role": "educator", "year": 1973, "id": "farewell-to-manzanar"},
+  {"title": "Felicity Learns a Lesson", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history", "civics"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Felicity is taught to be a gentlewoman while Virginia argues about tea and loyalty. The boycott is the lesson.", "reviewer_role": "educator", "series": "American Girl", "id": "felicity-learns-a-lesson"},
+  {"title": "Fever 1793", "author": "Laurie Halse Anderson", "category": "middle-grade", "domain": ["history", "science"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Yellow fever empties Philadelphia in 1793 and a girl is left running a coffeehouse alone. Pairs directly with An American Plague, one as story and one as record.", "reviewer_role": "educator", "year": 2000, "id": "fever-1793"},
+  {"title": "Flash, Crash, Rumble, and Roll", "author": "Franklyn M. Branley", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "How a thunderstorm builds, and why thunder comes after lightning.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "flash-crash-rumble-and-roll"},
+  {"title": "Fly Guy Presents: Castles", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["history"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "How a castle was defended and who lived inside.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-castles"},
+  {"title": "Fly Guy Presents: Dinosaurs", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Dinosaur kinds and how fossils are found.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-dinosaurs"},
+  {"title": "Fly Guy Presents: Insects", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Insect bodies and life cycles, up close.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-insects"},
+  {"title": "Fly Guy Presents: Sharks", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Shark species and biology, at a length a new reader will finish.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-sharks"},
+  {"title": "Fly Guy Presents: Snakes", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Snake biology, venom and why they matter to an ecosystem.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-snakes"},
+  {"title": "Fly Guy Presents: Space", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "The planets and space travel, with photographs.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-space"},
+  {"title": "Fly Guy Presents: The White House", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["civics", "history"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "What the building is, who works there and what a president does.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-the-white-house"},
+  {"title": "Fly Guy Presents: Weather", "author": "Tedd Arnold", "category": "easy-readers", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Clouds, storms and forecasting for a beginning reader.", "reviewer_role": "educator", "series": "Fly Guy Presents", "id": "fly-guy-presents-weather"},
+  {"title": "Forge", "author": "Laurie Halse Anderson", "category": "middle-grade", "domain": ["history", "civics"], "form": "fiction", "use": ["independent", "class-set"], "review": "Valley Forge from inside the camp: the cold, the hunger and the drilling that made an army.", "reviewer_role": "educator", "year": 2010, "series": "Seeds of America", "id": "forge"},
+  {"title": "Fossils Tell of Long Ago", "author": "Aliki", "category": "easy-readers", "domain": ["science", "history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "How a fossil forms and what it can and cannot tell us.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "fossils-tell-of-long-ago"},
+  {"title": "Freedom Walkers: The Story of the Montgomery Bus Boycott", "author": "Russell Freedman", "category": "middle-grade", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The boycott as an organised campaign, including the people who planned it before Rosa Parks sat down.", "reviewer_role": "educator", "year": 2006, "id": "freedom-walkers-the-story-of-the-montgomery-bus-boycott"},
+  {"title": "Germs Make Me Sick!", "author": "Melvin Berger", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Bacteria and viruses, what they do inside a body, and what the body does back.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "germs-make-me-sick"},
+  {"title": "Grand Canyon", "author": "Jason Chin", "category": "picture-books", "domain": ["science", "geography"], "form": "nonfiction", "use": ["read-aloud"], "review": "A hike down the Grand Canyon that is also a trip back through geologic time, showing each rock layer and what lived when it formed.", "reviewer_role": "educator", "year": 2017, "id": "grand-canyon"},
+  {"title": "Grandfather's Journey", "author": "Allen Say", "category": "picture-books", "domain": ["history", "geography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "A Japanese grandfather's life across two countries, and what it means to miss both.", "reviewer_role": "educator", "year": 1993, "id": "grandfathers-journey"},
+  {"title": "Gravity", "author": "Jason Chin", "category": "picture-books", "domain": ["science"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "What gravity does and what would happen without it, in very few words and very clear pictures.", "reviewer_role": "educator", "year": 2014, "id": "gravity"},
+  {"title": "Great Battles for Boys: Ancients to Middle Ages", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Marathon, Thermopylae, Cannae, Hastings and Agincourt, with the formations and weapons that decided them.", "reviewer_role": "educator", "year": 2018, "series": "Great Battles for Boys", "id": "great-battles-for-boys-ancients-to-middle-ages"},
+  {"title": "Great Battles for Boys: Bunker Hill to WWI", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "From the Revolution to the First World War, a battle at a time, with the terrain and the decisions that turned each one.", "reviewer_role": "educator", "year": 2016, "series": "Great Battles for Boys", "id": "great-battles-for-boys-bunker-hill-to-wwi"},
+  {"title": "Great Battles for Boys: The American Revolution", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Lexington to Yorktown, including how close the Continental Army came to collapsing.", "reviewer_role": "educator", "year": 2022, "series": "Great Battles for Boys", "id": "great-battles-for-boys-the-american-revolution"},
+  {"title": "Great Battles for Boys: The Civil War", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "The battles of the Civil War with the ground each was fought over, and what the armies were trying to do.", "reviewer_role": "educator", "year": 2017, "series": "Great Battles for Boys", "id": "great-battles-for-boys-the-civil-war"},
+  {"title": "Great Battles for Boys: The Korean War", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "The war that is usually skipped, from the Pusan Perimeter to Inchon and the Chosin Reservoir.", "reviewer_role": "educator", "year": 2021, "series": "Great Battles for Boys", "id": "great-battles-for-boys-the-korean-war"},
+  {"title": "Great Battles for Boys: The Vietnam War", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "The battles of Vietnam and the terrain and politics that shaped them.", "reviewer_role": "educator", "year": 2023, "series": "Great Battles for Boys", "id": "great-battles-for-boys-the-vietnam-war"},
+  {"title": "Great Battles for Boys: World War I", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "Trench warfare, the new machines, and why the Western Front barely moved for four years.", "reviewer_role": "educator", "year": 2019, "series": "Great Battles for Boys", "id": "great-battles-for-boys-world-war-i"},
+  {"title": "Great Battles for Boys: WW2 Europe", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "The European war from the invasion of Poland to the fall of Berlin.", "reviewer_role": "educator", "year": 2016, "series": "Great Battles for Boys", "id": "great-battles-for-boys-ww2-europe"},
+  {"title": "Great Battles for Boys: WW2 Pacific", "author": "Joe Giorello", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "appeal": ["boys"], "review": "The Pacific war from Pearl Harbor to Okinawa: island geography, carriers, and why each island mattered.", "reviewer_role": "educator", "year": 2016, "series": "Great Battles for Boys", "id": "great-battles-for-boys-ww2-pacific"},
+  {"title": "The Great Fire", "author": "Jim Murphy", "category": "middle-grade", "domain": ["history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The Chicago fire of 1871 told from survivors' accounts, with maps of how it spread.", "reviewer_role": "educator", "year": 1995, "id": "the-great-fire"},
+  {"title": "Hana's Suitcase", "author": "Karen Levine", "category": "middle-grade", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A Tokyo museum receives a suitcase with a name on it and traces the girl who owned it. Shows how history is actually reconstructed.", "reviewer_role": "educator", "year": 2002, "id": "hanas-suitcase"},
+  {"title": "Henry's Freedom Box", "author": "Ellen Levine", "category": "picture-books", "domain": ["history", "civics"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Henry Brown mailed himself out of slavery in a wooden crate in 1849. A true escape, told plainly.", "reviewer_role": "educator", "year": 2007, "id": "henrys-freedom-box"},
+  {"title": "Hidden Figures: Young Readers' Edition", "author": "Margot Lee Shetterly", "category": "middle-grade", "domain": ["science", "history", "biography", "mathematics"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["girls", "classrooms"], "review": "The Black women mathematicians who computed the trajectories that put Americans in orbit, and the segregation they worked under.", "reviewer_role": "educator", "year": 2016, "id": "hidden-figures-young-readers-edition"},
+  {"title": "Hold Fast", "author": "Blue Balliett", "category": "middle-grade", "domain": ["literature"], "form": "fiction", "use": ["independent", "class-set"], "review": "A family loses its father and its home and ends up in a Chicago shelter. Langston Hughes's poetry runs through it, and the book takes both the poems and homelessness seriously.", "reviewer_role": "educator", "year": 2013, "id": "hold-fast"},
+  {"title": "Hour of the Olympics", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["history", "civics"], "form": "fiction", "use": ["independent"], "review": "The ancient Olympics in Greece, and who was allowed to compete or even watch.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "hour-of-the-olympics"},
+  {"title": "How a Seed Grows", "author": "Helene J. Jordan", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Beans planted in eggshells, checked day by day. A first controlled experiment.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "how-a-seed-grows"},
+  {"title": "How Mountains Are Made", "author": "Kathleen Weidner Zoehfeld", "category": "easy-readers", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Plate collision and uplift, over a timescale a child can follow.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "how-mountains-are-made"},
+  {"title": "I Have Lived a Thousand Years", "author": "Livia Bitton-Jackson", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent"], "review": "Thirteen years old when she arrived at Auschwitz, and the memoir of what followed.", "reviewer_role": "educator", "year": 1997, "id": "i-have-lived-a-thousand-years"},
+  {"title": "The Immortal Life of Henrietta Lacks", "author": "Rebecca Skloot", "category": "new-adult", "domain": ["science", "biography", "civics"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "Cells taken from a Black woman in 1951 without her knowledge became the HeLa line and underpin modern medicine. About cell biology, consent and what her family was owed.", "reviewer_role": "educator", "year": 2010, "id": "the-immortal-life-of-henrietta-lacks"},
+  {"title": "Independent Dames", "author": "Laurie Halse Anderson", "category": "picture-books", "domain": ["history", "civics"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["girls", "classrooms"], "review": "The women of the Revolution, crowded onto the page with dates and sources. Corrects a story usually told with men only.", "reviewer_role": "educator", "year": 2008, "format": "illustrated-book", "id": "independent-dames"},
+  {"title": "Island: A Story of the Galapagos", "author": "Jason Chin", "category": "picture-books", "domain": ["science", "geography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Six million years of one volcanic island, from eruption to erosion, and the species that changed on it.", "reviewer_role": "educator", "year": 2012, "id": "island-a-story-of-the-galapagos"},
+  {"title": "Josefina Learns a Lesson", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Josefina learns to read and write in a household where few women did. Good on the Spanish colonial world of the Southwest.", "reviewer_role": "educator", "series": "American Girl", "id": "josefina-learns-a-lesson"},
+  {"title": "Kirsten Learns a Lesson", "author": "Janet Shaw", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Kirsten starts at a frontier school where she does not yet speak English, and meets a Native American girl. Good on prairie schooling.", "reviewer_role": "educator", "series": "American Girl", "id": "kirsten-learns-a-lesson"},
+  {"title": "The Knight at Dawn", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "review": "A medieval castle from the inside: the great hall, the moat, the armour and who lived where.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "the-knight-at-dawn"},
+  {"title": "Lincoln: A Photobiography", "author": "Russell Freedman", "category": "middle-grade", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Lincoln's life with the photographs taken during it. A short, sober biography that does not simplify him.", "reviewer_role": "educator", "year": 1987, "id": "lincoln-a-photobiography"},
+  {"title": "Locomotive", "author": "Brian Floca", "category": "picture-books", "domain": ["history", "science", "geography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "A family rides the new transcontinental railroad in 1869. The engine is drawn so carefully a child learns how steam power actually worked.", "reviewer_role": "educator", "year": 2013, "id": "locomotive"},
+  {"title": "A Long Walk to Water", "author": "Linda Sue Park", "category": "young-adult", "domain": ["geography", "civics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Two Sudanese lives thirty years apart, joined by water. Short, and it teaches a region most readers know nothing about.", "reviewer_role": "educator", "year": 2010, "id": "a-long-walk-to-water"},
+  {"title": "Magic Tree House Fact Tracker: Abraham Lincoln", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "Lincoln's life and presidency for readers just starting on him.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-abraham-lincoln"},
+  {"title": "Magic Tree House Fact Tracker: Ancient Greece and the Olympics", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "Greek city-states, gods and games.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-ancient-greece-and-the-olympics"},
+  {"title": "Magic Tree House Fact Tracker: Ancient Rome and Pompeii", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["history"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "Roman engineering and daily life, and the eruption that preserved it.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-ancient-rome-and-pompeii"},
+  {"title": "Magic Tree House Fact Tracker: Dinosaurs", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["science"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "The nonfiction companion: how fossils are found and what they tell us.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-dinosaurs"},
+  {"title": "Magic Tree House Fact Tracker: Dolphins and Sharks", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["science"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "Ocean biology, and the difference between a mammal and a fish.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-dolphins-and-sharks"},
+  {"title": "Magic Tree House Fact Tracker: Mummies and Pyramids", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["history"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "Egyptian burial, the pyramids and how archaeologists read them.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-mummies-and-pyramids"},
+  {"title": "Magic Tree House Fact Tracker: Pilgrims", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "The crossing, the first winter, and what the Mayflower Compact actually said.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-pilgrims"},
+  {"title": "Magic Tree House Fact Tracker: Rain Forests", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "How a rainforest is layered and why it matters globally.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-rain-forests"},
+  {"title": "Magic Tree House Fact Tracker: Sabertooths and the Ice Age", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["science"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "Ice Age animals and the climate that made them.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-sabertooths-and-the-ice-age"},
+  {"title": "Magic Tree House Fact Tracker: Space", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["science"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "The solar system and how people have got off the planet and back.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-space"},
+  {"title": "Magic Tree House Fact Tracker: Titanic", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["history", "science"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "The ship, the voyage and why it sank.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-titanic"},
+  {"title": "Magic Tree House Fact Tracker: Twisters and Other Terrible Storms", "author": "Mary Pope Osborne and Natalie Pope Boyce", "category": "chapter-books", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "reference", "class-set"], "appeal": ["classrooms"], "review": "How tornadoes, hurricanes and blizzards form, and how they are measured.", "reviewer_role": "educator", "series": "Magic Tree House Fact Tracker", "id": "magic-tree-house-fact-tracker-twisters-and-other-terrible-storms"},
+  {"title": "Magic Tree House: Dinosaurs Before Dark", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["science", "history"], "form": "fiction", "use": ["independent"], "review": "Jack and Annie travel back to the time of the dinosaurs. The first book in a long series where each trip is to a real time or place.", "reviewer_role": "educator", "year": 1992, "series": "Magic Tree House", "id": "magic-tree-house-dinosaurs-before-dark"},
+  {"title": "The Man Who Walked Between the Towers", "author": "Mordicai Gerstein", "category": "picture-books", "domain": ["history", "art-and-music"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Philippe Petit's 1974 wire walk between the World Trade Center towers, and the engineering of the rigging.", "reviewer_role": "educator", "year": 2003, "id": "the-man-who-walked-between-the-towers"},
+  {"title": "March: Book One", "author": "John Lewis, Andrew Aydin and Nate Powell", "category": "young-adult", "domain": ["history", "civics", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "John Lewis's own account of the civil rights movement, in comics. Nonviolent resistance as a trained discipline.", "reviewer_role": "educator", "year": 2013, "format": "graphic-novel", "id": "march-book-one"},
+  {"title": "Martin's Big Words", "author": "Doreen Rappaport", "category": "picture-books", "domain": ["history", "civics", "biography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Martin Luther King Jr's life told through his own sentences.", "reviewer_role": "educator", "year": 2001, "id": "martins-big-words"},
+  {"title": "Maus I: My Father Bleeds History", "author": "Art Spiegelman", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "Spiegelman's father tells how he survived Poland and Auschwitz, drawn in comics. Also about what survival does to a family afterwards.", "reviewer_role": "educator", "year": 1986, "format": "graphic-novel", "series": "Maus", "id": "maus-i-my-father-bleeds-history"},
+  {"title": "Maus II: And Here My Troubles Began", "author": "Art Spiegelman", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "The second half: Auschwitz itself, and the son trying to draw his father honestly.", "reviewer_role": "educator", "year": 1991, "format": "graphic-novel", "series": "Maus", "id": "maus-ii-and-here-my-troubles-began"},
+  {"title": "Me... Jane", "author": "Patrick McDonnell", "category": "picture-books", "domain": ["science", "biography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Jane Goodall as a child with a toy chimpanzee, and the life of observation that followed.", "reviewer_role": "educator", "year": 2011, "id": "me-jane"},
+  {"title": "Meet Addy", "author": "Connie Porter", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Addy and her mother escape slavery in North Carolina during the Civil War. The first book in an American Girl series, which follows girls through real periods of American history.", "reviewer_role": "educator", "year": 1993, "series": "American Girl", "id": "meet-addy"},
+  {"title": "Meet Felicity", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history", "civics"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "Williamsburg in 1774, with the argument over independence running through an apprentice's household.", "reviewer_role": "educator", "series": "American Girl", "id": "meet-felicity"},
+  {"title": "Meet Josefina", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history", "geography"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "New Mexico in 1824, when it was still Mexico. A rancho year, and the arrival of American traders on the Santa Fe Trail.", "reviewer_role": "educator", "series": "American Girl", "id": "meet-josefina"},
+  {"title": "Meet Kirsten", "author": "Janet Shaw", "category": "chapter-books", "domain": ["history", "geography"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "A Swedish family crosses the Atlantic in 1854 and settles in Minnesota. Shows what immigrating actually involved, from the ship to the first winter.", "reviewer_role": "educator", "series": "American Girl", "id": "meet-kirsten"},
+  {"title": "Meet Molly", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "The American home front in 1944: rationing, victory gardens, and a father away as an army doctor.", "reviewer_role": "educator", "series": "American Girl", "id": "meet-molly"},
+  {"title": "Midnight on the Moon", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["science"], "form": "fiction", "use": ["independent"], "review": "The moon, and what it takes to keep a person alive on it.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "midnight-on-the-moon"},
+  {"title": "Mill", "author": "David Macaulay", "category": "middle-grade", "domain": ["history", "science"], "form": "nonfiction", "use": ["independent"], "review": "New England textile mills and the water power that ran them. The industrial revolution at the scale of one building.", "reviewer_role": "educator", "year": 1983, "format": "illustrated-book", "id": "mill"},
+  {"title": "Molly Learns a Lesson", "author": "Valerie Tripp", "category": "chapter-books", "domain": ["history", "civics"], "form": "fiction", "use": ["independent"], "appeal": ["girls"], "review": "School war-effort projects, and what children were asked to do while the war went on.", "reviewer_role": "educator", "series": "American Girl", "id": "molly-learns-a-lesson"},
+  {"title": "The Moon Seems to Change", "author": "Franklyn M. Branley", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The phases of the moon, and why it is the shadow and not the moon that changes.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "the-moon-seems-to-change"},
+  {"title": "Moonshot: The Flight of Apollo 11", "author": "Brian Floca", "category": "picture-books", "domain": ["science", "history"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "The Apollo 11 mission, hour by hour, in hushed language and exact drawings of the spacecraft.", "reviewer_role": "educator", "year": 2009, "id": "moonshot-the-flight-of-apollo-11"},
+  {"title": "Most Dangerous: Daniel Ellsberg and the Secret History of the Vietnam War", "author": "Steve Sheinkin", "category": "young-adult", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "How the Pentagon Papers came out, and what it cost. A case study in what a government may keep secret.", "reviewer_role": "educator", "year": 2015, "id": "most-dangerous-daniel-ellsberg-and-the-secret-history-of-the-vietnam-war"},
+  {"title": "Mr. Ferris and His Wheel", "author": "Kathryn Gibbs Davis", "category": "picture-books", "domain": ["science", "history"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "The engineer who answered Chicago's demand for something to beat the Eiffel Tower, and the physics of it.", "reviewer_role": "educator", "year": 2014, "id": "mr-ferris-and-his-wheel"},
+  {"title": "Mummies in the Morning", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["history", "geography"], "form": "fiction", "use": ["independent"], "review": "Ancient Egypt, mummification and what the tomb paintings were for.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "mummies-in-the-morning"},
+  {"title": "My Five Senses", "author": "Aliki", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The senses, one at a time, for the youngest readers on this list.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "my-five-senses"},
+  {"title": "Nathan Hale's Hazardous Tales: Above the Trenches", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The First World War in the air, when aircraft were new and pilots had no parachutes.", "reviewer_role": "educator", "year": 2023, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-above-the-trenches"},
+  {"title": "Nathan Hale's Hazardous Tales: Alamo All-Stars", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "Texas from colonisation to the Alamo and San Jacinto, with the land and slavery questions behind the revolt left in.", "reviewer_role": "educator", "year": 2016, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-alamo-all-stars"},
+  {"title": "Nathan Hale's Hazardous Tales: Big Bad Ironclad!", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The Union and Confederate ironclads, and the engineers who built them. A naval arms race told as comedy, with the engineering kept accurate.", "reviewer_role": "educator", "year": 2012, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-big-bad-ironclad"},
+  {"title": "Nathan Hale's Hazardous Tales: Blades of Freedom", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The Haitian Revolution, and how it pushed Napoleon into selling Louisiana. Connects a slave revolt to the map of the United States.", "reviewer_role": "educator", "year": 2020, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-blades-of-freedom"},
+  {"title": "Nathan Hale's Hazardous Tales: Bones and Berserkers", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "mythology"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The Norse: raiding, sailing and settling, and where the sagas stop matching the archaeology.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-bones-and-berserkers"},
+  {"title": "Nathan Hale's Hazardous Tales: Cold War Correspondent", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "Marguerite Higgins reporting the Korean War from the front while being told women could not be there.", "reviewer_role": "educator", "year": 2021, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-cold-war-correspondent"},
+  {"title": "Nathan Hale's Hazardous Tales: Donner Dinner Party", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The Donner Party's wrong turn and the winter that followed. Honest about the cannibalism, and clear about the geography that trapped them.", "reviewer_role": "educator", "year": 2013, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-donner-dinner-party"},
+  {"title": "Nathan Hale's Hazardous Tales: Lafayette!", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The teenage French nobleman who bought a ship and joined Washington's army. Covers the French alliance that decided the Revolution.", "reviewer_role": "educator", "year": 2018, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-lafayette"},
+  {"title": "Nathan Hale's Hazardous Tales: Major Impossible", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "geography", "science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "John Wesley Powell, who lost an arm at Shiloh and then ran the Colorado River through the Grand Canyon. Good on how a river carves rock.", "reviewer_role": "educator", "year": 2019, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-major-impossible"},
+  {"title": "Nathan Hale's Hazardous Tales: One Dead Spy", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The first book in a comic history series, narrated by the Revolutionary War spy Nathan Hale just before his execution. Children read it for fun and come away knowing the Revolution\u2019s people, places and battles.", "reviewer_role": "educator", "year": 2012, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-one-dead-spy"},
+  {"title": "Nathan Hale's Hazardous Tales: Raid of No Return", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The Doolittle Raid on Tokyo in 1942, and what happened to the crews who could not get back.", "reviewer_role": "educator", "year": 2017, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-raid-of-no-return"},
+  {"title": "Nathan Hale's Hazardous Tales: The Underground Abductor", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "Harriet Tubman\u2019s life and her work on the Underground Railroad, told in comics.", "reviewer_role": "educator", "year": 2015, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-the-underground-abductor"},
+  {"title": "Nathan Hale's Hazardous Tales: The Web of War", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "The most recent volume in the series, continuing its account of how wars begin and what they cost.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-the-web-of-war"},
+  {"title": "Nathan Hale's Hazardous Tales: Treaties, Trenches, Mud, and Blood", "author": "Nathan Hale", "category": "middle-grade", "domain": ["history", "civics"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["boys", "classrooms"], "review": "How the alliances of 1914 turned one assassination into a world war. The clearest short account of the First World War a child is likely to find.", "reviewer_role": "educator", "year": 2014, "format": "graphic-novel", "series": "Nathan Hale's Hazardous Tales", "id": "nathan-hales-hazardous-tales-treaties-trenches-mud-and-blood"},
+  {"title": "Night", "author": "Elie Wiesel", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "Wiesel\u2019s memoir of Auschwitz and Buchenwald as a teenager. A short, first-hand account of the Holocaust.", "reviewer_role": "educator", "id": "night"},
+  {"title": "A Night Divided", "author": "Jennifer A. Nielsen", "category": "middle-grade", "domain": ["history", "civics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The Berlin Wall goes up overnight with a family on both sides of it. Conveys what a divided city meant day to day.", "reviewer_role": "educator", "year": 2015, "id": "a-night-divided"},
+  {"title": "Night of the Ninjas", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["history", "geography"], "form": "fiction", "use": ["independent"], "review": "Feudal Japan, and the discipline and landscape a ninja worked in.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "night-of-the-ninjas"},
+  {"title": "The Noisy Paint Box", "author": "Barb Rosenstock", "category": "picture-books", "domain": ["art-and-music", "biography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Kandinsky heard colours as sound and painted what he heard. An introduction to abstract art and to synaesthesia.", "reviewer_role": "educator", "year": 2014, "id": "the-noisy-paint-box"},
+  {"title": "The Notorious Benedict Arnold", "author": "Steve Sheinkin", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "Arnold as one of the Revolution's best battlefield commanders before he changed sides, and why he did.", "reviewer_role": "educator", "year": 2010, "id": "the-notorious-benedict-arnold"},
+  {"title": "Number the Stars", "author": "Lois Lowry", "category": "middle-grade", "domain": ["history"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A ten-year-old in Nazi-occupied Copenhagen helps hide her Jewish best friend. Based on the Danish rescue of Jews in 1943.", "reviewer_role": "educator", "year": 1989, "id": "number-the-stars"},
+  {"title": "An Octopus Is Amazing", "author": "Patricia Lauber", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Octopus anatomy and behaviour, including the camouflage and the ink.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "an-octopus-is-amazing"},
+  {"title": "The Omnivore's Dilemma (Young Readers Edition)", "author": "Michael Pollan", "category": "young-adult", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Where four meals come from, traced back to the field. Changes how a reader reads a label.", "reviewer_role": "educator", "year": 2009, "id": "the-omnivores-dilemma-young-readers-edition"},
+  {"title": "On a Beam of Light: A Story of Albert Einstein", "author": "Jennifer Berne", "category": "picture-books", "domain": ["science", "biography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Einstein from a quiet child to relativity, keeping the wondering at the centre.", "reviewer_role": "educator", "year": 2013, "id": "on-a-beam-of-light-a-story-of-albert-einstein"},
+  {"title": "One Grain of Rice", "author": "Demi", "category": "picture-books", "domain": ["mathematics"], "form": "fiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "A girl outwits a raja by asking for one grain of rice, doubled daily for a month. Doubling made vivid and alarming.", "reviewer_role": "educator", "year": 1997, "id": "one-grain-of-rice"},
+  {"title": "Ox-Cart Man", "author": "Donald Hall, illustrated by Barbara Cooney", "category": "picture-books", "domain": ["history"], "form": "fiction", "use": ["read-aloud"], "review": "A year on a nineteenth-century New England farm, from shearing sheep to selling goods at market. Shows how a household made and traded what it needed.", "reviewer_role": "educator", "year": 1979, "id": "ox-cart-man"},
+  {"title": "Parallel Journeys", "author": "Eleanor Ayer", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "A Jewish girl in hiding and a boy in the Hitler Youth, their accounts set side by side. Shows how ordinary people were recruited into it.", "reviewer_role": "educator", "year": 1995, "id": "parallel-journeys"},
+  {"title": "Pieces and Players", "author": "Blue Balliett", "category": "middle-grade", "domain": ["art-and-music"], "form": "fiction", "use": ["independent"], "review": "Thirteen works of art are stolen from a Chicago museum, echoing the real unsolved Gardner Museum heist. Readers meet Vermeer, Rembrandt and Degas along the way.", "reviewer_role": "educator", "year": 2015, "series": "Chasing Vermeer", "id": "pieces-and-players"},
+  {"title": "Pyramid", "author": "David Macaulay", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["independent"], "review": "Building an Egyptian pyramid, from quarry to capstone, with the tools and the labour drawn in.", "reviewer_role": "educator", "year": 1975, "format": "illustrated-book", "id": "pyramid"},
+  {"title": "The Radium Girls (Young Readers Edition)", "author": "Kate Moore", "category": "young-adult", "domain": ["science", "history", "civics"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Women poisoned by painting watch dials with radium, and the case that changed industrial safety law.", "reviewer_role": "educator", "year": 2020, "id": "the-radium-girls-young-readers-edition"},
+  {"title": "Redwoods", "author": "Jason Chin", "category": "picture-books", "domain": ["science", "geography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "A boy reads about redwoods on the subway and finds himself among them. Real forest science inside a picture book.", "reviewer_role": "educator", "year": 2009, "id": "redwoods"},
+  {"title": "Refugee", "author": "Alan Gratz", "category": "young-adult", "domain": ["history", "geography", "civics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Three children fleeing in 1939, 1994 and 2015. Puts three refugee crises in one frame.", "reviewer_role": "educator", "year": 2017, "id": "refugee"},
+  {"title": "Salt to the Sea", "author": "Ruta Sepetys", "category": "young-adult", "domain": ["history"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "The sinking of the Wilhelm Gustloff, the deadliest maritime disaster in history and almost unknown.", "reviewer_role": "educator", "year": 2016, "id": "salt-to-the-sea"},
+  {"title": "Science Comics: Bats: Learning to Fly", "author": "Falynn Koch", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Echolocation, flight and why bats matter to the food supply.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-bats-learning-to-fly"},
+  {"title": "Science Comics: Coral Reefs", "author": "Maris Wicks", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "How coral reefs form, what lives in them and what threatens them, in comic form.", "reviewer_role": "educator", "year": 2016, "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-coral-reefs"},
+  {"title": "Science Comics: Dinosaurs: Fossils and Feathers", "author": "MK Reed", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "How we know what dinosaurs looked like, and how the picture changed when feathers turned up.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-dinosaurs-fossils-and-feathers"},
+  {"title": "Science Comics: Plagues: The Microscopic Battlefield", "author": "Falynn Koch", "category": "middle-grade", "domain": ["science", "history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Disease, immunity and the epidemics that changed history.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-plagues-the-microscopic-battlefield"},
+  {"title": "Science Comics: Rockets: Defying Gravity", "author": "Anne Drozd and Jerzy Drozd", "category": "middle-grade", "domain": ["science", "history"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "How rockets work and the history of getting one off the ground.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-rockets-defying-gravity"},
+  {"title": "Science Comics: Sharks: Nature's Perfect Hunter", "author": "Joe Flood", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Shark biology and evolution, and a corrective to how films portray them.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-sharks-natures-perfect-hunter"},
+  {"title": "Science Comics: Solar System: Our Place in Space", "author": "Rosemary Mosco", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "A tour of the planets with the physics that keeps them in orbit.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-solar-system-our-place-in-space"},
+  {"title": "Science Comics: The Brain: The Ultimate Thinking Machine", "author": "Tory Woollcott", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "How the brain is built and what each part does.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-the-brain-the-ultimate-thinking-machine"},
+  {"title": "Science Comics: Trees: Kings of the Forest", "author": "Andy Hirsch", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "How a tree actually works, from root to canopy.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-trees-kings-of-the-forest"},
+  {"title": "Science Comics: Volcanoes: Fire and Life", "author": "Jon Chad", "category": "middle-grade", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "How volcanoes work and why people live beside them anyway.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-volcanoes-fire-and-life"},
+  {"title": "Science Comics: Wild Weather: Storms, Meteorology, and Climate", "author": "MK Reed", "category": "middle-grade", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Why weather does what it does, and how forecasting works.", "reviewer_role": "educator", "format": "graphic-novel", "series": "Science Comics", "id": "science-comics-wild-weather-storms-meteorology-and-climate"},
+  {"title": "A Seed Is Sleepy", "author": "Dianna Hutts Aston", "category": "picture-books", "domain": ["science"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "How seeds travel, wait and germinate, in botanical paintings.", "reviewer_role": "educator", "year": 2007, "id": "a-seed-is-sleepy"},
+  {"title": "Snowflake Bentley", "author": "Jacqueline Briggs Martin", "category": "picture-books", "domain": ["science", "biography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "A Vermont farmer spent his life photographing snowflakes to prove no two are alike. How patient observation becomes science.", "reviewer_role": "educator", "year": 1998, "id": "snowflake-bentley"},
+  {"title": "Star Stuff: Carl Sagan and the Mysteries of the Cosmos", "author": "Stephanie Roth Sisson", "category": "picture-books", "domain": ["science", "biography"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "A boy in Brooklyn wonders what the stars are and grows up to tell everyone.", "reviewer_role": "educator", "year": 2014, "id": "star-stuff-carl-sagan-and-the-mysteries-of-the-cosmos"},
+  {"title": "Stephen Biesty's Incredible Body", "author": "Stephen Biesty and Richard Platt", "category": "middle-grade", "domain": ["science"], "form": "reference", "use": ["reference"], "review": "The human body in cross-section, drawn with explorers climbing through it.", "reviewer_role": "educator", "year": 1998, "format": "illustrated-book", "id": "stephen-biestys-incredible-body"},
+  {"title": "Stephen Biesty's Incredible Cross-Sections", "author": "Stephen Biesty and Richard Platt", "category": "middle-grade", "domain": ["science", "history"], "form": "reference", "use": ["reference", "independent"], "appeal": ["boys"], "review": "A man-of-war, a cathedral, a steam train and more, sliced open and drawn with every deck and room labelled. The book children lie on the floor with.", "reviewer_role": "educator", "year": 1992, "format": "illustrated-book", "id": "stephen-biestys-incredible-cross-sections"},
+  {"title": "Stephen Biesty's Incredible Explosions", "author": "Stephen Biesty and Richard Platt", "category": "middle-grade", "domain": ["science", "geography"], "form": "reference", "use": ["reference", "independent"], "appeal": ["boys"], "review": "Buildings and machines pulled apart layer by layer, from an opera house to an oil rig.", "reviewer_role": "educator", "year": 1996, "format": "illustrated-book", "id": "stephen-biestys-incredible-explosions"},
+  {"title": "The Story of the World, Volume 1: Ancient Times", "author": "Susan Wise Bauer", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["read-aloud", "reference"], "review": "World history from the first nomads to the fall of Rome, told as a continuous story.", "reviewer_role": "educator", "series": "The Story of the World", "id": "the-story-of-the-world-volume-1"},
+  {"title": "The Story of the World, Volume 2: The Middle Ages", "author": "Susan Wise Bauer", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["read-aloud", "reference"], "review": "From the fall of Rome to the Renaissance, worldwide rather than only European.", "reviewer_role": "educator", "series": "The Story of the World", "id": "the-story-of-the-world-volume-2-the-middle-ages"},
+  {"title": "The Story of the World, Volume 3: Early Modern Times", "author": "Susan Wise Bauer", "category": "middle-grade", "domain": ["history", "geography"], "form": "nonfiction", "use": ["read-aloud", "reference"], "review": "Elizabeth I to the American frontier, following several continents at once.", "reviewer_role": "educator", "series": "The Story of the World", "id": "the-story-of-the-world-volume-3-early-modern-times"},
+  {"title": "The Story of the World, Volume 4: The Modern Age", "author": "Susan Wise Bauer", "category": "middle-grade", "domain": ["history", "civics"], "form": "nonfiction", "use": ["read-aloud", "reference"], "review": "Victoria to the end of the Soviet Union, in the same continuous-story form.", "reviewer_role": "educator", "series": "The Story of the World", "id": "the-story-of-the-world-volume-4-the-modern-age"},
+  {"title": "Sugar Changed the World", "author": "Marc Aronson and Marina Budhos", "category": "young-adult", "domain": ["history", "science", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "One commodity traced through slavery, empire and science. The clearest short case for why trade goods drive history.", "reviewer_role": "educator", "year": 2010, "id": "sugar-changed-the-world"},
+  {"title": "Sunset of the Sabertooth", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["science", "history"], "form": "fiction", "use": ["independent"], "review": "The Ice Age: mammoths, sabertooths and how people survived the cold.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "sunset-of-the-sabertooth"},
+  {"title": "Sunshine Makes the Seasons", "author": "Franklyn M. Branley", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Axial tilt explained with an orange and a pencil. The reason for seasons, done right.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "sunshine-makes-the-seasons"},
+  {"title": "Swirl by Swirl: Spirals in Nature", "author": "Joyce Sidman", "category": "picture-books", "domain": ["science", "mathematics"], "form": "poetry", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Spirals from snail shells to galaxies, in verse. Pattern as something that recurs across scales.", "reviewer_role": "educator", "year": 2011, "id": "swirl-by-swirl-spirals-in-nature"},
+  {"title": "Symphony for the City of the Dead", "author": "M. T. Anderson", "category": "young-adult", "domain": ["history", "art-and-music", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Shostakovich and the siege of Leningrad, and what a symphony meant in a starving city.", "reviewer_role": "educator", "year": 2015, "id": "symphony-for-the-city-of-the-dead"},
+  {"title": "Thank You, Sarah: The Woman Who Saved Thanksgiving", "author": "Laurie Halse Anderson", "category": "picture-books", "domain": ["history", "civics", "biography"], "form": "nonfiction", "use": ["read-aloud"], "appeal": ["girls"], "review": "Sarah Josepha Hale wrote to five presidents until one made Thanksgiving a national holiday. A lesson in persistence and how holidays get made.", "reviewer_role": "educator", "year": 2002, "format": "illustrated-book", "id": "thank-you-sarah-the-woman-who-saved-thanksgiving"},
+  {"title": "They Called Us Enemy", "author": "George Takei", "category": "young-adult", "domain": ["history", "civics", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Takei's childhood in the internment camps, drawn. Pairs with Farewell to Manzanar.", "reviewer_role": "educator", "year": 2019, "format": "graphic-novel", "id": "they-called-us-enemy"},
+  {"title": "Unbroken: An Olympian's Journey (Young Adult Adaptation)", "author": "Laura Hillenbrand", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Louis Zamperini from the Berlin Olympics to a raft in the Pacific to a prison camp.", "reviewer_role": "educator", "year": 2014, "id": "unbroken-an-olympians-journey-young-adult-adaptation"},
+  {"title": "Undefeated: Jim Thorpe and the Carlisle Indian School Football Team", "author": "Steve Sheinkin", "category": "young-adult", "domain": ["history", "biography"], "form": "nonfiction", "use": ["independent"], "review": "Jim Thorpe and a football team from a school built to erase Native culture. Sport and federal Indian policy in the same book.", "reviewer_role": "educator", "year": 2017, "id": "undefeated-jim-thorpe-and-the-carlisle-indian-school-football-team"},
+  {"title": "Underground", "author": "David Macaulay", "category": "middle-grade", "domain": ["science"], "form": "nonfiction", "use": ["independent"], "review": "What is under a city street: foundations, water, sewers, tunnels and the engineering holding it up.", "reviewer_role": "educator", "year": 1976, "format": "illustrated-book", "id": "underground"},
+  {"title": "Vacation Under the Volcano", "author": "Mary Pope Osborne", "category": "chapter-books", "domain": ["history", "science"], "form": "fiction", "use": ["independent"], "review": "Pompeii on the day Vesuvius erupted, and Roman daily life just before it.", "reviewer_role": "educator", "series": "Magic Tree House", "id": "vacation-under-the-volcano"},
+  {"title": "Volcanoes", "author": "Franklyn M. Branley", "category": "easy-readers", "domain": ["science", "geography"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Plates, magma and the eruptions that follow, for a reader who has just started.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "volcanoes"},
+  {"title": "The Way Things Work Now", "author": "David Macaulay", "category": "middle-grade", "domain": ["science", "mathematics"], "form": "reference", "use": ["reference", "independent"], "review": "How machines work, drawn and explained from levers up to microchips, with a mammoth running through it. A reference children read for pleasure.", "reviewer_role": "educator", "year": 1988, "format": "illustrated-book", "id": "the-way-things-work-now"},
+  {"title": "What Do You Do With a Tail Like This?", "author": "Steve Jenkins and Robin Page", "category": "picture-books", "domain": ["science"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "The same body part across many animals, and what each one is for. An early lesson in adaptation.", "reviewer_role": "educator", "year": 2003, "id": "what-do-you-do-with-a-tail-like-this"},
+  {"title": "What Happens to a Hamburger?", "author": "Paul Showers", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "review": "How digestion works, written for children who are just learning to read.", "reviewer_role": "educator", "year": 1970, "id": "what-happens-to-a-hamburger"},
+  {"title": "What Makes Day and Night", "author": "Franklyn M. Branley", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Why the sun appears to move, demonstrated with a lamp and a turning child.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "what-makes-day-and-night"},
+  {"title": "Who Eats What?", "author": "Patricia Lauber", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Food chains and webs, and what happens when one link goes.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "who-eats-what"},
+  {"title": "Why Frogs Are Wet", "author": "Judy Hawes", "category": "easy-readers", "domain": ["science"], "form": "nonfiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Amphibian skin and why it has to stay damp.", "reviewer_role": "educator", "series": "Let's-Read-and-Find-Out Science", "id": "why-frogs-are-wet"},
+  {"title": "The Wright 3", "author": "Blue Balliett", "category": "middle-grade", "domain": ["art-and-music", "mathematics"], "form": "fiction", "use": ["independent", "class-set"], "appeal": ["classrooms"], "review": "Petra and Calder try to stop Frank Lloyd Wright's Robie House from being broken up and sold off. Readers pick up how Wright designed, and the geometry and pentominoes run through the puzzle.", "reviewer_role": "educator", "year": 2006, "series": "Chasing Vermeer", "id": "the-wright-3"},
+  {"title": "Your Place in the Universe", "author": "Jason Chin", "category": "picture-books", "domain": ["science"], "form": "nonfiction", "use": ["read-aloud", "class-set"], "appeal": ["classrooms"], "review": "Scales up from an eight-year-old to the observable universe, one comparison at a time.", "reviewer_role": "educator", "year": 2020, "id": "your-place-in-the-universe"}
+];
+
+/* SAMPLE affiliate links, so this mockup shows the built-out page.
+   A real entry stores the link a reviewer pasted from SiteStripe, which
+   points at one product (/dp/<ISBN-10>) and carries a real tracking ID.
+   These are searches carrying a placeholder tag: they land on a real Amazon
+   page, and they visibly are not a live affiliate link. */
+var SAMPLE_TAG = "YOUR-TAG-HERE";
+BOOKS.forEach(function (b) {
+  b.amazon_url = "https://www.amazon.com/s?k=" +
+    encodeURIComponent(b.title + " " + b.author.replace(/, illustrated by.*$/, "")) +
+    "&tag=" + SAMPLE_TAG;
+});
+
+(function () {
+  var SETS = ["domain", "format", "form", "use", "appeal"];
+  var $ = function (id) { return document.getElementById(id); };
+  var byValue = function (list) {
+    var m = {};
+    list.forEach(function (e) { m[e.value] = e; });
+    return m;
+  };
+  var CATEGORY = byValue(V.category), DOMAIN = byValue(V.domain), FORMAT = byValue(V.format),
+      FORM = byValue(V.form), USE = byValue(V.use), APPEAL = byValue(V.appeal), ROLE = byValue(V.reviewer_role);
+
+  var sortKey = function (t) { return t.replace(/^(The|A|An) /, "").toLowerCase(); };
+  BOOKS.sort(function (a, b) { return sortKey(a.title).localeCompare(sortKey(b.title)); });
+  BOOKS.forEach(function (b) {
+    SETS.forEach(function (k) { if (b[k] == null) b[k] = k === "format" ? "" : []; });
+    if (b.series == null) b.series = "";
+  });
+
+  var ages = function (c) { return c.to ? "ages " + c.from + "–" + c.to : "ages " + c.from + "+"; };
+  var withArticle = function (w) { return (/^[aeiou]/i.test(w) ? "an " : "a ") + w; };
+  var roleText = function (b) { return withArticle(ROLE[b.reviewer_role].label.toLowerCase()); };
+
+  var seriesCount = {};
+  BOOKS.forEach(function (b) { if (b.series) seriesCount[b.series] = (seriesCount[b.series] || 0) + 1; });
+
+  var has = function (b, key, v) { return [].concat(b[key]).indexOf(v) !== -1; };
+
+  var state = {
+    category: "",
+    sets: { domain: [], format: [], form: [], use: [], appeal: [] },
+    reviewer: "",
+    series: "",
+    picks: [],
+    showPicks: false
+  };
+
+  /* ---- age scale geometry: categories overlap, so they sit in three lanes ---- */
+  var MIN = 3, MAX = 17.5;
+  var pct = function (a) { return ((a - MIN) / (MAX - MIN)) * 100; };
+  var LANE = { "picture-books": 0, "easy-readers": 1, "chapter-books": 2, "middle-grade": 0, "young-adult": 1, "new-adult": 0 };
+
+  V.category.forEach(function (c) {
+    var count = BOOKS.filter(function (b) { return b.category === c.value; }).length;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "rl-band" + (c.to ? "" : " rl-band--open");
+    btn.setAttribute("aria-pressed", "false");
+    btn.dataset.category = c.value;
+    btn.dataset.name = c.label;
+    btn.dataset.ages = ages(c);
+    btn.dataset.desc = c.description;
+    btn.style.left = pct(c.from) + "%";
+    btn.style.width = "calc(" + (pct(c.to == null ? MAX : c.to) - pct(c.from)) + "% - 3px)";
+    var n = document.createElement("span");
+    n.className = "rl-band-name";
+    n.textContent = c.label;
+    var m = document.createElement("span");
+    m.className = "rl-band-meta";
+    m.textContent = ages(c) + " · " + count + (count === 1 ? " book" : " books");
+    btn.append(n, m);
+    btn.addEventListener("click", function () {
+      state.category = state.category === c.value ? "" : c.value;
+      state.showPicks = false;
+      render();
+    });
+    $("rl-lane-" + (LANE[c.value] || 0)).appendChild(btn);
+  });
+
+  for (var t = MIN; t <= 17; t++) {
+    var tick = document.createElement("span");
+    tick.className = "rl-tick";
+    tick.style.left = pct(t) + "%";
+    tick.textContent = String(t);
+    $("rl-ticks").appendChild(tick);
+  }
+
+  /* ---- filter rail ---- */
+  var bandEls = [].slice.call(document.querySelectorAll(".rl-band"));
+  SETS.forEach(function (k) {
+    var host = $("rl-f-" + k);
+    if (!host) return;
+    V[k].forEach(function (d) {
+      var label = document.createElement("label");
+      label.className = "rl-opt";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.id = "rl-" + k + "-" + d.value;
+      input.dataset.facet = k;
+      input.value = d.value;
+      var text = document.createElement("span");
+      text.textContent = k === "appeal" ? d.label.replace("Often popular ", "") : d.label;
+      var n = document.createElement("span");
+      n.className = "rl-n";
+      label.append(input, text, n);
+      input.addEventListener("change", function () {
+        var i = state.sets[k].indexOf(d.value);
+        if (i === -1) state.sets[k].push(d.value); else state.sets[k].splice(i, 1);
+        state.showPicks = false;
+        render();
+      });
+      host.appendChild(label);
+    });
+  });
+
+  var reviewerSel = $("rl-reviewer");
+  var anyOpt = document.createElement("option");
+  anyOpt.value = "";
+  anyOpt.dataset.label = "Anyone";
+  reviewerSel.appendChild(anyOpt);
+  V.reviewer_role.forEach(function (r) {
+    var o = document.createElement("option");
+    o.value = r.value;
+    o.dataset.label = r.label;
+    reviewerSel.appendChild(o);
+  });
+  reviewerSel.addEventListener("change", function () {
+    state.reviewer = reviewerSel.value;
+    state.showPicks = false;
+    render();
+  });
+
+  $("rl-readaloud").addEventListener("change", function () {
+    var i = state.sets.use.indexOf("read-aloud");
+    if (this.checked && i === -1) state.sets.use.push("read-aloud");
+    if (!this.checked && i !== -1) state.sets.use.splice(i, 1);
+    state.showPicks = false;
+    render();
+  });
+
+  function clearAll() {
+    state.category = "";
+    SETS.forEach(function (k) { state.sets[k] = []; });
+    state.reviewer = "";
+    state.series = "";
+    state.showPicks = false;
+    render();
+  }
+  $("rl-all").addEventListener("click", clearAll);
+  $("rl-clear").addEventListener("click", clearAll);
+
+  /* ---- "what's on the list" jump buttons ---- */
+  function kinds(hostId, key) {
+    var host = $(hostId);
+    V[key].forEach(function (d) {
+      var wrap = document.createElement("div");
+      var dt = document.createElement("dt");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "rl-kind";
+      btn.textContent = d.label;
+      btn.addEventListener("click", function () {
+        clearAll();
+        state.sets[key] = [d.value];
+        render();
+        $("rl-shelf").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      dt.appendChild(btn);
+      var dd = document.createElement("dd");
+      dd.textContent = d.description;
+      wrap.append(dt, dd);
+      host.appendChild(wrap);
+    });
+  }
+  kinds("rl-kinds-domain", "domain");
+  kinds("rl-kinds-form", "form");
+
+  /* ---- the books ---- */
+  var list = $("rl-books");
+  BOOKS.forEach(function (b) {
+    var cat = CATEGORY[b.category];
+    var li = document.createElement("li");
+    li.className = "rl-book";
+    li.id = "book-" + b.id;
+
+    var main = document.createElement("div");
+    main.className = "rl-book-main";
+
+    var h3 = document.createElement("h3");
+    h3.className = "rl-title";
+    h3.textContent = b.title;
+
+    var byline = document.createElement("p");
+    byline.className = "rl-byline";
+    byline.textContent = b.author + (b.year ? " · " + b.year : "");
+    main.append(h3, byline);
+
+    if (b.series) {
+      var sp = document.createElement("p");
+      sp.className = "rl-series";
+      sp.append("Part of a series: ");
+      var strong = document.createElement("strong");
+      strong.textContent = b.series;
+      sp.appendChild(strong);
+      if (seriesCount[b.series] > 1) {
+        sp.append(" · ");
+        var sbtn = document.createElement("button");
+        sbtn.type = "button";
+        sbtn.className = "rl-textbtn";
+        sbtn.textContent = "See all " + seriesCount[b.series] + " on the list";
+        sbtn.addEventListener("click", function () {
+          clearAll();
+          state.series = b.series;
+          render();
+        });
+        sp.appendChild(sbtn);
+      }
+      main.appendChild(sp);
+    }
+
+    var review = document.createElement("p");
+    review.className = "rl-review";
+    review.textContent = "“" + b.review + "”";
+    main.appendChild(review);
+
+    var tags = document.createElement("ul");
+    tags.className = "rl-tags";
+    var tag = function (text, cls) {
+      var t = document.createElement("li");
+      if (cls) t.className = cls;
+      t.textContent = text;
+      tags.appendChild(t);
+    };
+    tag(cat.label + " · " + ages(cat), "rl-tag--key");
+    if (b.format) tag(FORMAT[b.format].label, "rl-tag--key");
+    if (cat.mature) tag("May include sexual content", "rl-tag--mature");
+    b.domain.forEach(function (x) { tag(DOMAIN[x].label); });
+    tag(FORM[b.form].label);
+    b.use.forEach(function (x) { tag(USE[x].label); });
+    b.appeal.forEach(function (x) { tag(APPEAL[x].label, "rl-tag--appeal"); });
+    main.appendChild(tags);
+
+    var credit = document.createElement("p");
+    credit.className = "rl-credit";
+    credit.append("Review by ");
+    var who = document.createElement("span");
+    who.textContent = roleText(b);
+    credit.append(who, " · Approved by an editor");
+    main.appendChild(credit);
+
+    var actions = document.createElement("div");
+    actions.className = "rl-book-actions";
+    var pick = document.createElement("button");
+    pick.type = "button";
+    pick.className = "rl-pick";
+    pick.setAttribute("aria-pressed", "false");
+    pick.textContent = "+ Add to my list";
+    pick.addEventListener("click", function () {
+      var i = state.picks.indexOf(b.id);
+      if (i === -1) state.picks.push(b.id); else state.picks.splice(i, 1);
+      if (!state.picks.length) state.showPicks = false;
+      render();
+    });
+    actions.appendChild(pick);
+
+    if (b.amazon_url) {
+      var buy = document.createElement("a");
+      buy.className = "rl-out";
+      buy.href = b.amazon_url;
+      buy.rel = "sponsored noopener"; // Associates requires paid links be marked
+      buy.target = "_blank";
+      buy.textContent = "Find on Amazon \u2197";
+      var buyNote = document.createElement("span");
+      buyNote.className = "rl-out-note";
+      buyNote.textContent = "Supports this list";
+      actions.append(buy, buyNote);
+    }
+
+    // Buy and borrow sit side by side on every card. The Amazon links earn
+    // a commission; leaving borrowing to a footnote would tilt the list.
+    var libby = document.createElement("a");
+    libby.className = "rl-out rl-out--alt";
+    libby.href = LIBBY_URL;
+    libby.rel = "noopener";
+    libby.target = "_blank";
+    libby.textContent = "Borrow in Libby \u2197";
+    var libbyNote = document.createElement("span");
+    libbyNote.className = "rl-out-note";
+    libbyNote.textContent = "Free with a library card";
+    actions.append(libby, libbyNote);
+
+    li.append(main, actions);
+    li.__book = b;
+    li.__pick = pick;
+    list.appendChild(li);
+  });
+
+  var bookEls = [].slice.call(list.children);
+
+  function matches(b, skip) {
+    if (state.showPicks) return state.picks.indexOf(b.id) !== -1;
+    if (skip !== "category" && state.category && b.category !== state.category) return false;
+    for (var i = 0; i < SETS.length; i++) {
+      var k = SETS[i];
+      if (skip !== k && state.sets[k].length && !state.sets[k].some(function (v) { return has(b, k, v); })) return false;
+    }
+    if (skip !== "reviewer" && state.reviewer && b.reviewer_role !== state.reviewer) return false;
+    if (state.series && b.series !== state.series) return false;
+    return true;
+  }
+
+  function summary() {
+    if (state.showPicks) return "the books you picked";
+    var bits = [];
+    var band = bandEls.filter(function (el) { return el.dataset.category === state.category; })[0];
+    bits.push(band ? band.dataset.name + ", " + band.dataset.ages : "All ages");
+    SETS.forEach(function (k) {
+      var picked = state.sets[k].map(function (v) {
+        var e = byValue(V[k])[v];
+        return (k === "appeal" ? e.label.replace("Often popular ", "") : e.label).toLowerCase();
+      });
+      if (picked.length) bits.push((k === "appeal" ? "often popular " : "") + picked.join(" or "));
+    });
+    if (state.reviewer) bits.push("reviewed by " + (state.reviewer === "other" ? "others" : state.reviewer + "s"));
+    if (state.series) bits.push("in the " + state.series + " series");
+    return bits.join(" · ");
+  }
+
+  function render() {
+    var shown = BOOKS.filter(function (b) { return matches(b); });
+    bookEls.forEach(function (el) {
+      el.hidden = shown.indexOf(el.__book) === -1;
+      var picked = state.picks.indexOf(el.__book.id) !== -1;
+      el.__pick.setAttribute("aria-pressed", String(picked));
+      el.__pick.textContent = picked ? "✓ On my list" : "+ Add to my list";
+    });
+
+    bandEls.forEach(function (el) {
+      el.setAttribute("aria-pressed", String(el.dataset.category === state.category));
+    });
+
+    var readAloud = $("rl-readaloud");
+    readAloud.checked = state.sets.use.indexOf("read-aloud") !== -1;
+
+    var band = bandEls.filter(function (el) { return el.dataset.category === state.category; })[0];
+    var desc = $("rl-desc");
+    desc.replaceChildren();
+    var line = function (name, text) {
+      var p = document.createElement("span");
+      var s = document.createElement("strong");
+      s.textContent = name + " ";
+      p.append(s, text);
+      return p;
+    };
+    if (band) desc.append(line(band.dataset.name + " \u00b7 " + band.dataset.ages + ".", band.dataset.desc));
+    if (readAloud.checked) {
+      if (band) desc.append(document.createElement("br"));
+      desc.append(line("Good to read aloud.", V.read_aloud_description));
+    }
+
+    [].slice.call(document.querySelectorAll("[data-facet]")).forEach(function (input) {
+      var k = input.dataset.facet;
+      input.checked = state.sets[k].indexOf(input.value) !== -1;
+      var n = BOOKS.filter(function (b) { return matches(b, k) && has(b, k, input.value); }).length;
+      input.parentElement.querySelector(".rl-n").textContent = String(n);
+      input.parentElement.classList.toggle("rl-opt--zero", n === 0 && !input.checked);
+    });
+
+    reviewerSel.value = state.reviewer;
+    [].slice.call(reviewerSel.options).forEach(function (o) {
+      var n = BOOKS.filter(function (b) { return matches(b, "reviewer") && (!o.value || b.reviewer_role === o.value); }).length;
+      o.textContent = o.dataset.label + " (" + n + ")";
+    });
+
+    $("rl-count").textContent = shown.length + (shown.length === 1 ? " book" : " books");
+    $("rl-summary").textContent = summary();
+    $("rl-empty").hidden = shown.length !== 0;
+    if (!shown.length) {
+      $("rl-empty-title").textContent = "No books yet for " + summary() + ".";
+    }
+
+    var bar = $("rl-picks-bar");
+    bar.hidden = state.picks.length === 0;
+    document.body.classList.toggle("rl-has-picks", state.picks.length > 0);
+    $("rl-picks-count").textContent = state.picks.length + (state.picks.length === 1 ? " book on my list" : " books on my list");
+    $("rl-picks-view").textContent = state.showPicks ? "Show all books" : "View my list";
+  }
+
+  $("rl-picks-view").addEventListener("click", function () {
+    state.showPicks = !state.showPicks;
+    render();
+    $("rl-shelf").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("rl-picks-clear").addEventListener("click", function () {
+    state.picks = [];
+    state.showPicks = false;
+    render();
+  });
+
+  function flash(btn, text) {
+    var was = btn.textContent;
+    btn.textContent = text;
+    setTimeout(function () { btn.textContent = was; }, 1600);
+  }
+  function share(btn, text) {
+    try {
+      navigator.clipboard.writeText(text).then(
+        function () { flash(btn, "Copied"); },
+        function () { flash(btn, "Press ⌘C to copy"); }
+      );
+    } catch (e) {
+      flash(btn, "Press ⌘C to copy");
+    }
+  }
+  $("rl-copy-view").addEventListener("click", function () {
+    var p = [];
+    if (state.category) p.push("category=" + state.category);
+    SETS.forEach(function (k) { if (state.sets[k].length) p.push(k + "=" + state.sets[k].join(",")); });
+    if (state.reviewer) p.push("reviewer=" + state.reviewer);
+    if (state.series) p.push("series=" + encodeURIComponent(state.series));
+    share(this, "/library/reading-list" + (p.length ? "?" + p.join("&") : ""));
+  });
+  $("rl-picks-share").addEventListener("click", function () {
+    share(this, "/library/reading-list?list=" + state.picks.join(","));
+  });
+
+  function headerHeight() {
+    var h = document.querySelector(".site-header");
+    if (h) document.documentElement.style.setProperty("--header-h", h.offsetHeight + "px");
+  }
+  headerHeight();
+  window.addEventListener("resize", headerHeight);
+  window.addEventListener("load", headerHeight);
+
+  $("rl-total").textContent = String(BOOKS.length);
+  $("rl-disclosure").hidden = !BOOKS.some(function (b) { return b.amazon_url; });
+  render();
+})();
+</script>
